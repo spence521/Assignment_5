@@ -432,7 +432,7 @@ namespace Assignment_1
                 }
             }
         }
-        public int DetermineError(ref List<TrainingData> TestData)
+        public int DetermineError(ref List<Entry> TestData)
         {
             int errors = 0;
             foreach (var item in TestData)
@@ -443,7 +443,7 @@ namespace Assignment_1
             }
             return errors;
         }
-        private List<int> DetermineSubError(TrainingData item)
+        private List<int> DetermineSubError(Entry item)
         {
             if (IsLeaf)
             {
@@ -451,117 +451,14 @@ namespace Assignment_1
                 else { return new List<int> { 0, Value }; }
             }
             else
-            {   
-                if (Feature == Features.ScreenNameLength)
+            {
+                if(!item.Vector.ContainsKey(Feature))
                 {
-                    if (item.screenNameLength == Assignment_1.TrainingData.ScreenNameLength.Range0_3) { return Children[0].DetermineSubError(item); }
-                    else if (item.screenNameLength == Assignment_1.TrainingData.ScreenNameLength.Range4_6) { return Children[1].DetermineSubError(item); }
-                    else if (item.screenNameLength == Assignment_1.TrainingData.ScreenNameLength.Range7_9) { return Children[2].DetermineSubError(item); }
-                    else if (item.screenNameLength == Assignment_1.TrainingData.ScreenNameLength.Range10_12) { return Children[3].DetermineSubError(item); }
-                    else { return Children[4].DetermineSubError(item); }
+                    return Children[0].DetermineSubError(item);
                 }
-                else if (Feature == Features.DescriptionLength)
+                else
                 {
-                    if (item.descriptionLength == Assignment_1.TrainingData.DescriptionLength.Range0_33) { return Children[0].DetermineSubError(item); }
-                    else if (item.descriptionLength == Assignment_1.TrainingData.DescriptionLength.Range34_66) { return Children[1].DetermineSubError(item); }
-                    else if (item.descriptionLength == Assignment_1.TrainingData.DescriptionLength.Range67_99) { return Children[2].DetermineSubError(item); }
-                    else if (item.descriptionLength == Assignment_1.TrainingData.DescriptionLength.Range100_132) { return Children[3].DetermineSubError(item); }
-                    else { return Children[4].DetermineSubError(item); }
-                }
-                else if (Feature == Features.Days)
-                {
-                    if (item.Days == Assignment_1.TrainingData.LongevityDays.Range0_200) { return Children[0].DetermineSubError(item); }
-                    else if (item.Days == Assignment_1.TrainingData.LongevityDays.Range201_400) { return Children[1].DetermineSubError(item); }
-                    else if (item.Days == Assignment_1.TrainingData.LongevityDays.Range401_600) { return Children[2].DetermineSubError(item); }
-                    else if (item.Days == Assignment_1.TrainingData.LongevityDays.Range601_800) { return Children[3].DetermineSubError(item); }
-                    else { return Children[4].DetermineSubError(item); }
-                }
-                else if (Feature == Features.Hours)
-                {
-                    if (item.Hours == Assignment_1.TrainingData.LongevityHours.Range0_8) { return Children[0].DetermineSubError(item); }
-                    else if (item.Hours == Assignment_1.TrainingData.LongevityHours.Range9_16) { return Children[1].DetermineSubError(item); }
-                    else { return Children[2].DetermineSubError(item); }
-                } 
-                else if (Feature == Features.Minutes)
-                {
-                    if (item.Minutes == Assignment_1.TrainingData.LongevityMinSec.Range0_15) { return Children[0].DetermineSubError(item); }
-                    else if (item.Minutes == Assignment_1.TrainingData.LongevityMinSec.Range16_30) { return Children[1].DetermineSubError(item); }
-                    else if (item.Minutes == Assignment_1.TrainingData.LongevityMinSec.Range31_45) { return Children[2].DetermineSubError(item); }
-                    else { return Children[3].DetermineSubError(item); }
-                }
-                else if(Feature == Features.Seconds)
-                {
-                    if (item.Seconds == Assignment_1.TrainingData.LongevityMinSec.Range0_15) { return Children[0].DetermineSubError(item); }
-                    else if (item.Seconds == Assignment_1.TrainingData.LongevityMinSec.Range16_30) { return Children[1].DetermineSubError(item); }
-                    else if (item.Seconds == Assignment_1.TrainingData.LongevityMinSec.Range31_45) { return Children[2].DetermineSubError(item); }
-                    else { return Children[3].DetermineSubError(item); }
-                }                                
-                else if (Feature == Features.Following)
-                {
-                    if (item.Following == Assignment_1.TrainingData.Follow.Range0_100) { return Children[0].DetermineSubError(item); }
-                    else if (item.Following == Assignment_1.TrainingData.Follow.Range101_400) { return Children[1].DetermineSubError(item); }
-                    else if (item.Following == Assignment_1.TrainingData.Follow.Range401_1400) { return Children[2].DetermineSubError(item); }
-                    else if (item.Following == Assignment_1.TrainingData.Follow.Range1401_3000) { return Children[3].DetermineSubError(item); }
-                    else if (item.Following == Assignment_1.TrainingData.Follow.Range3001_10000) { return Children[4].DetermineSubError(item); }
-                    else { return Children[5].DetermineSubError(item); }
-                }
-                else if (Feature == Features.Followers)
-                {
-                    if (item.Followers == Assignment_1.TrainingData.Follow.Range0_100) { return Children[0].DetermineSubError(item); }
-                    else if (item.Followers == Assignment_1.TrainingData.Follow.Range101_400) { return Children[1].DetermineSubError(item); }
-                    else if (item.Followers == Assignment_1.TrainingData.Follow.Range401_1400) { return Children[2].DetermineSubError(item); }
-                    else if (item.Followers == Assignment_1.TrainingData.Follow.Range1401_3000) { return Children[3].DetermineSubError(item); }
-                    else if (item.Followers == Assignment_1.TrainingData.Follow.Range3001_10000) { return Children[4].DetermineSubError(item); }
-                    else { return Children[5].DetermineSubError(item); }
-                }
-                else if (Feature == Features.Ratio)
-                {
-                    if (item.ratio == Assignment_1.TrainingData.Ratio.Range0_1) { return Children[0].DetermineSubError(item); }
-                    else if (item.ratio == Assignment_1.TrainingData.Ratio.Range1_3) { return Children[1].DetermineSubError(item); }
-                    else if (item.ratio == Assignment_1.TrainingData.Ratio.Range3_8) { return Children[2].DetermineSubError(item); }
-                    else { return Children[3].DetermineSubError(item); }
-                }
-                else if (Feature == Features.TotalTweets)
-                {
-                    if (item.TotalTweets == Assignment_1.TrainingData.Tweets.Range0_66) { return Children[0].DetermineSubError(item); }
-                    else if (item.TotalTweets == Assignment_1.TrainingData.Tweets.Range67_132) { return Children[1].DetermineSubError(item); }
-                    else { return Children[2].DetermineSubError(item); }
-                }
-                else if (Feature == Features.TweetsPerDay)
-                {
-                    if (item.tweetsPerDay == Assignment_1.TrainingData.TweetsPerDay.Range0_66) { return Children[0].DetermineSubError(item); }
-                    else if (item.tweetsPerDay == Assignment_1.TrainingData.TweetsPerDay.Range67_132) { return Children[1].DetermineSubError(item); }
-                    else { return Children[2].DetermineSubError(item); }
-                }
-                else if (Feature == Features.AverageLinks)
-                {
-                    if (item.averageLinks == Assignment_1.TrainingData.AverageLinks.Range0_1) { return Children[0].DetermineSubError(item); }
-                    else if (item.averageLinks == Assignment_1.TrainingData.AverageLinks.Range1_2) { return Children[1].DetermineSubError(item); }
-                    else { return Children[2].DetermineSubError(item); }
-                }
-                else if (Feature == Features.AverageUniqueLinks)
-                {
-                    if (item.AverageUniqueLinks == Assignment_1.TrainingData.AverageLinks.Range0_1) { return Children[0].DetermineSubError(item); }
-                    else if (item.AverageUniqueLinks == Assignment_1.TrainingData.AverageLinks.Range1_2) { return Children[1].DetermineSubError(item); }
-                    else { return Children[2].DetermineSubError(item); }
-                }
-                else if (Feature == Features.AverageUsername)
-                {
-                    if (item.averageUsername == Assignment_1.TrainingData.AverageUsername.Range0_2) { return Children[0].DetermineSubError(item); }
-                    else if (item.averageUsername == Assignment_1.TrainingData.AverageUsername.Range2_4) { return Children[1].DetermineSubError(item); }
-                    else { return Children[2].DetermineSubError(item); }
-                }
-                else if (Feature == Features.AverageUniqueUsername)
-                {
-                    if (item.AverageUniqueUsername == Assignment_1.TrainingData.AverageUsername.Range0_2) { return Children[0].DetermineSubError(item); }
-                    else if (item.AverageUniqueUsername == Assignment_1.TrainingData.AverageUsername.Range2_4) { return Children[1].DetermineSubError(item); }
-                    else { return Children[2].DetermineSubError(item); }
-                }
-                else // (Feature == Features.ChangeRate)
-                {
-                    if (item.changeRate == Assignment_1.TrainingData.ChangeRate.Range0_5) { return Children[0].DetermineSubError(item); }
-                    else if (item.changeRate == Assignment_1.TrainingData.ChangeRate.Range5_50) { return Children[1].DetermineSubError(item); }
-                    else { return Children[2].DetermineSubError(item); }
+                    return Children[1].DetermineSubError(item);
                 }
             }
         }
