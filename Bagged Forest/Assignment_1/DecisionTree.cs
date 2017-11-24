@@ -49,6 +49,7 @@ namespace Assignment_1
         {
             random = r;
             IsLeaf = isLeaf;
+            InformationGains = new Dictionary<int, double>();
             Children = new List<DecisionTree>();
             DepthRemaining = depthRemaining;
             Value = value;
@@ -162,7 +163,11 @@ namespace Assignment_1
             
             for (int i = 1; i < 67693; i++)
             {
-                InformationGains.Add(i, CalculateInformationGain(Positive_Labels, Negative_Labels, Counts11[i], Counts01[i], Counts10[i], Counts00[i]));
+                double PosLabel_PosFeature = Counts11.ContainsKey(i) ? Counts11[i] : 0;
+                double NegLabel_PosFeature = Counts01.ContainsKey(i) ? Counts01[i] : 0;
+                double PosLabel_NegFeature = Counts10.ContainsKey(i) ? Counts10[i] : 0;
+                double NegLabel_NegFeature = Counts00.ContainsKey(i) ? Counts00[i] : 0;
+                InformationGains.Add(i, CalculateInformationGain(Positive_Labels, Negative_Labels, PosLabel_PosFeature, NegLabel_PosFeature, PosLabel_NegFeature, NegLabel_NegFeature));
             }
 
            
@@ -260,13 +265,27 @@ namespace Assignment_1
             if(ResultInLeaf(ref LeftData))
             {
                 Is_Leaf[0] = true;
-                LeafValues[0] = Datas[0].GroupBy(m => m.Label).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
+                if (Datas[0].Count != 0)
+                {
+                    LeafValues[0] = Datas[0].GroupBy(m => m.Label).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
+                }
+                else
+                {
+                    LeafValues[0] = Datas[1].GroupBy(m => m.Label).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
+                }
             }
 
             if (ResultInLeaf(ref RightData))
             {
                 Is_Leaf[1] = true;
-                LeafValues[1] = Datas[1].GroupBy(m => m.Label).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
+                if (Datas[1].Count != 0)
+                {
+                    LeafValues[1] = Datas[1].GroupBy(m => m.Label).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
+                }
+                else
+                {
+                    LeafValues[1] = Datas[0].GroupBy(m => m.Label).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
+                }
             }           
 
             if (FeaturesTaken.Count > 67691)
