@@ -222,139 +222,26 @@ namespace Assignment_1
         private void DetermineSubTrees()
         {
             List<int> LeafValues = new List<int>();
-            List<List<TrainingData>> Datas = new List<List<TrainingData>>();
+            List<List<Entry>> Datas = new List<List<Entry>>();
             List<bool> Is_Leaf = new List<bool>();
             List<List<int>> Distinct_Labels = new List<List<int>>();
-            List<List<TrainingData.ScreenNameLength>> screenNameLength = new List<List<TrainingData.ScreenNameLength>>();
-            List<List<TrainingData.DescriptionLength>> descriptionLength = new List<List<TrainingData.DescriptionLength>>();
-            List<List<TrainingData.LongevityDays>> Days = new List<List<TrainingData.LongevityDays>>();
-            List<List<TrainingData.LongevityHours>> Hours = new List<List<TrainingData.LongevityHours>>();
-            List<List<TrainingData.LongevityMinSec>> Minutes = new List<List<TrainingData.LongevityMinSec>>();
-            List<List<TrainingData.LongevityMinSec>> Seconds = new List<List<TrainingData.LongevityMinSec>>();
-            List<List<TrainingData.Follow>> Following = new List<List<TrainingData.Follow>>();
-            List<List<TrainingData.Follow>> Followers = new List<List<TrainingData.Follow>>();
-            List<List<TrainingData.Ratio>> ratio = new List<List<TrainingData.Ratio>>();
-            List<List<TrainingData.Tweets>> TotalTweets = new List<List<TrainingData.Tweets>>();
-            List<List<TrainingData.TweetsPerDay>> TweetsPerDay = new List<List<TrainingData.TweetsPerDay>>();
-            List<List<TrainingData.AverageLinks>> averageLinks = new List<List<TrainingData.AverageLinks>>();
-            List<List<TrainingData.AverageLinks>> AverageUniqueLinks = new List<List<TrainingData.AverageLinks>>();
-            List<List<TrainingData.AverageUsername>> averageUsername = new List<List<TrainingData.AverageUsername>>();
-            List<List<TrainingData.AverageUsername>> AverageUniqueUsername = new List<List<TrainingData.AverageUsername>>();
-            List<List<TrainingData.ChangeRate>> changeRate = new List<List<TrainingData.ChangeRate>>();
             //char? LeftLeafValue = null;
-            //List<TrainingData> LeftData;
-            if (Feature == Features.ScreenNameLength)
+            List<Entry> LeftData = new List<Entry>();
+            List<Entry> RightData = new List<Entry>();
+            foreach (var item in TrainingData)
             {
-                Datas.Add(TrainingData.Where(x => x.screenNameLength == Assignment_1.TrainingData.ScreenNameLength.Range0_3).ToList());
-                Datas.Add(TrainingData.Where(x => x.screenNameLength == Assignment_1.TrainingData.ScreenNameLength.Range4_6).ToList());
-                Datas.Add(TrainingData.Where(x => x.screenNameLength == Assignment_1.TrainingData.ScreenNameLength.Range7_9).ToList());
-                Datas.Add(TrainingData.Where(x => x.screenNameLength == Assignment_1.TrainingData.ScreenNameLength.Range10_12).ToList());
-                Datas.Add(TrainingData.Where(x => x.screenNameLength == Assignment_1.TrainingData.ScreenNameLength.RangeGT_12).ToList());
-
+                if (!item.Vector.ContainsKey(Feature))
+                {
+                    LeftData.Add(item); //left tree is the negative route
+                }
+                else
+                {
+                    RightData.Add(item); //Right Tree is the positive route
+                }
             }
-            else if (Feature == Features.DescriptionLength)
-            {
-                Datas.Add(TrainingData.Where(x => x.descriptionLength == Assignment_1.TrainingData.DescriptionLength.Range0_33).ToList());
-                Datas.Add(TrainingData.Where(x => x.descriptionLength == Assignment_1.TrainingData.DescriptionLength.Range34_66).ToList());
-                Datas.Add(TrainingData.Where(x => x.descriptionLength == Assignment_1.TrainingData.DescriptionLength.Range67_99).ToList());
-                Datas.Add(TrainingData.Where(x => x.descriptionLength == Assignment_1.TrainingData.DescriptionLength.Range100_132).ToList());
-                Datas.Add(TrainingData.Where(x => x.descriptionLength == Assignment_1.TrainingData.DescriptionLength.RangeGT_132).ToList());
-            }
-            else if (Feature == Features.Days)
-            {
-                Datas.Add(TrainingData.Where(x => x.Days == Assignment_1.TrainingData.LongevityDays.Range0_200).ToList());
-                Datas.Add(TrainingData.Where(x => x.Days == Assignment_1.TrainingData.LongevityDays.Range201_400).ToList());
-                Datas.Add(TrainingData.Where(x => x.Days == Assignment_1.TrainingData.LongevityDays.Range401_600).ToList());
-                Datas.Add(TrainingData.Where(x => x.Days == Assignment_1.TrainingData.LongevityDays.Range601_800).ToList());
-                Datas.Add(TrainingData.Where(x => x.Days == Assignment_1.TrainingData.LongevityDays.RangeGT_800).ToList());
-            }
-            else if (Feature == Features.Hours)
-            {
-                Datas.Add(TrainingData.Where(x => x.Hours == Assignment_1.TrainingData.LongevityHours.Range0_8).ToList());
-                Datas.Add(TrainingData.Where(x => x.Hours == Assignment_1.TrainingData.LongevityHours.Range9_16).ToList());
-                Datas.Add(TrainingData.Where(x => x.Hours == Assignment_1.TrainingData.LongevityHours.RangeGT_16).ToList());
-            }
-            else if (Feature == Features.Minutes)
-            {
-                Datas.Add(TrainingData.Where(x => x.Minutes == Assignment_1.TrainingData.LongevityMinSec.Range0_15).ToList());
-                Datas.Add(TrainingData.Where(x => x.Minutes == Assignment_1.TrainingData.LongevityMinSec.Range16_30).ToList());
-                Datas.Add(TrainingData.Where(x => x.Minutes == Assignment_1.TrainingData.LongevityMinSec.Range31_45).ToList());
-                Datas.Add(TrainingData.Where(x => x.Minutes == Assignment_1.TrainingData.LongevityMinSec.RangeGT_45).ToList());
-            }
-            else if (Feature == Features.Seconds)
-            {
-                Datas.Add(TrainingData.Where(x => x.Seconds == Assignment_1.TrainingData.LongevityMinSec.Range0_15).ToList());
-                Datas.Add(TrainingData.Where(x => x.Seconds == Assignment_1.TrainingData.LongevityMinSec.Range16_30).ToList());
-                Datas.Add(TrainingData.Where(x => x.Seconds == Assignment_1.TrainingData.LongevityMinSec.Range31_45).ToList());
-                Datas.Add(TrainingData.Where(x => x.Seconds == Assignment_1.TrainingData.LongevityMinSec.RangeGT_45).ToList());
-            }
-            else if (Feature == Features.Following)
-            {
-                Datas.Add(TrainingData.Where(x => x.Following == Assignment_1.TrainingData.Follow.Range0_100).ToList());
-                Datas.Add(TrainingData.Where(x => x.Following == Assignment_1.TrainingData.Follow.Range101_400).ToList());
-                Datas.Add(TrainingData.Where(x => x.Following == Assignment_1.TrainingData.Follow.Range401_1400).ToList());
-                Datas.Add(TrainingData.Where(x => x.Following == Assignment_1.TrainingData.Follow.Range1401_3000).ToList());
-                Datas.Add(TrainingData.Where(x => x.Following == Assignment_1.TrainingData.Follow.Range3001_10000).ToList());
-                Datas.Add(TrainingData.Where(x => x.Following == Assignment_1.TrainingData.Follow.RangeGT_10000).ToList());
-            }
-            else if (Feature == Features.Followers)
-            {
-                Datas.Add(TrainingData.Where(x => x.Followers == Assignment_1.TrainingData.Follow.Range0_100).ToList());
-                Datas.Add(TrainingData.Where(x => x.Followers == Assignment_1.TrainingData.Follow.Range101_400).ToList());
-                Datas.Add(TrainingData.Where(x => x.Followers == Assignment_1.TrainingData.Follow.Range401_1400).ToList());
-                Datas.Add(TrainingData.Where(x => x.Followers == Assignment_1.TrainingData.Follow.Range1401_3000).ToList());
-                Datas.Add(TrainingData.Where(x => x.Followers == Assignment_1.TrainingData.Follow.Range3001_10000).ToList());
-                Datas.Add(TrainingData.Where(x => x.Followers == Assignment_1.TrainingData.Follow.RangeGT_10000).ToList());
-            }
-            else if (Feature == Features.Ratio)
-            {
-                Datas.Add(TrainingData.Where(x => x.ratio == Assignment_1.TrainingData.Ratio.Range0_1).ToList());
-                Datas.Add(TrainingData.Where(x => x.ratio == Assignment_1.TrainingData.Ratio.Range1_3).ToList());
-                Datas.Add(TrainingData.Where(x => x.ratio == Assignment_1.TrainingData.Ratio.Range3_8).ToList());
-                Datas.Add(TrainingData.Where(x => x.ratio == Assignment_1.TrainingData.Ratio.RangeGT_8).ToList());
-            }
-            else if (Feature == Features.TotalTweets)
-            {
-                Datas.Add(TrainingData.Where(x => x.TotalTweets == Assignment_1.TrainingData.Tweets.Range0_66).ToList());
-                Datas.Add(TrainingData.Where(x => x.TotalTweets == Assignment_1.TrainingData.Tweets.Range67_132).ToList());
-                Datas.Add(TrainingData.Where(x => x.TotalTweets == Assignment_1.TrainingData.Tweets.RangeGT_132).ToList());
-            }
-            else if (Feature == Features.TweetsPerDay)
-            {
-                Datas.Add(TrainingData.Where(x => x.tweetsPerDay == Assignment_1.TrainingData.TweetsPerDay.Range0_66).ToList());
-                Datas.Add(TrainingData.Where(x => x.tweetsPerDay == Assignment_1.TrainingData.TweetsPerDay.Range67_132).ToList());
-                Datas.Add(TrainingData.Where(x => x.tweetsPerDay == Assignment_1.TrainingData.TweetsPerDay.RangeGT_132).ToList());
-            }
-            else if (Feature == Features.AverageLinks)
-            {
-                Datas.Add(TrainingData.Where(x => x.averageLinks == Assignment_1.TrainingData.AverageLinks.Range0_1).ToList());
-                Datas.Add(TrainingData.Where(x => x.averageLinks == Assignment_1.TrainingData.AverageLinks.Range1_2).ToList());
-                Datas.Add(TrainingData.Where(x => x.averageLinks == Assignment_1.TrainingData.AverageLinks.RangeGT_2).ToList());
-            }
-            else if (Feature == Features.AverageUniqueLinks)
-            {
-                Datas.Add(TrainingData.Where(x => x.AverageUniqueLinks == Assignment_1.TrainingData.AverageLinks.Range0_1).ToList());
-                Datas.Add(TrainingData.Where(x => x.AverageUniqueLinks == Assignment_1.TrainingData.AverageLinks.Range1_2).ToList());
-                Datas.Add(TrainingData.Where(x => x.AverageUniqueLinks == Assignment_1.TrainingData.AverageLinks.RangeGT_2).ToList());
-            }
-            else if (Feature == Features.AverageUsername)
-            {
-                Datas.Add(TrainingData.Where(x => x.averageUsername == Assignment_1.TrainingData.AverageUsername.Range0_2).ToList());
-                Datas.Add(TrainingData.Where(x => x.averageUsername == Assignment_1.TrainingData.AverageUsername.Range2_4).ToList());
-                Datas.Add(TrainingData.Where(x => x.averageUsername == Assignment_1.TrainingData.AverageUsername.RangeGT_4).ToList());
-            }
-            else if (Feature == Features.AverageUniqueUsername)
-            {
-                Datas.Add(TrainingData.Where(x => x.AverageUniqueUsername == Assignment_1.TrainingData.AverageUsername.Range0_2).ToList());
-                Datas.Add(TrainingData.Where(x => x.AverageUniqueUsername == Assignment_1.TrainingData.AverageUsername.Range2_4).ToList());
-                Datas.Add(TrainingData.Where(x => x.AverageUniqueUsername == Assignment_1.TrainingData.AverageUsername.RangeGT_4).ToList());
-            }
-            else //change rate
-            {
-                Datas.Add(TrainingData.Where(x => x.changeRate == Assignment_1.TrainingData.ChangeRate.Range0_5).ToList());
-                Datas.Add(TrainingData.Where(x => x.changeRate == Assignment_1.TrainingData.ChangeRate.Range5_50).ToList());
-                Datas.Add(TrainingData.Where(x => x.changeRate == Assignment_1.TrainingData.ChangeRate.RangeGT_50).ToList());
-            }
+            Datas.Add(LeftData);
+            Datas.Add(RightData);
+            
 
             for (int i = 0; i < Datas.Count; i++)
             {
@@ -367,63 +254,45 @@ namespace Assignment_1
                     if (Datas[i].Count == 0) { LeafValues.Add(0); }
                     else { LeafValues.Add(Datas[i].Select(p => p.Label).First()); }
                 }
-                else { LeafValues.Add(-1); } //A negative one leaf value mean its not a leaf. 1 is positive label, 0 is negative label
+                else { LeafValues.Add(0); } //A 0 leaf value mean its not a leaf. 1 is positive label, -1 is negative label
+            }
+                        
+            if(ResultInLeaf(ref LeftData))
+            {
+                Is_Leaf[0] = true;
+                LeafValues[0] = Datas[0].GroupBy(m => m.Label).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
             }
 
-            foreach (var item in Datas)
+            if (ResultInLeaf(ref RightData))
             {
-                screenNameLength.Add((from h in item select h.screenNameLength).Distinct().ToList()); // this determines if there are more than 1 of the same result from the feature 
-                descriptionLength.Add((from h in item select h.descriptionLength).Distinct().ToList());
-                Days.Add((from h in item select h.Days).Distinct().ToList());
-                Hours.Add((from h in item select h.Hours).Distinct().ToList());
-                Minutes.Add((from h in item select h.Minutes).Distinct().ToList());
-                Seconds.Add((from h in item select h.Seconds).Distinct().ToList());
-                Following.Add((from h in item select h.Following).Distinct().ToList());
-                Followers.Add((from h in item select h.Followers).Distinct().ToList());
-                ratio.Add((from h in item select h.ratio).Distinct().ToList());
-                TotalTweets.Add((from h in item select h.TotalTweets).Distinct().ToList());
-                TweetsPerDay.Add((from h in item select h.tweetsPerDay).Distinct().ToList());
-                averageLinks.Add((from h in item select h.averageLinks).Distinct().ToList());
-                AverageUniqueLinks.Add((from h in item select h.AverageUniqueLinks).Distinct().ToList());
-                averageUsername.Add((from h in item select h.averageUsername).Distinct().ToList());
-                AverageUniqueUsername.Add((from h in item select h.AverageUniqueUsername).Distinct().ToList());
-                changeRate.Add((from h in item select h.changeRate).Distinct().ToList());
-            }
-            for (int i = 0; i < Datas.Count; i++)
-            {
-                if(screenNameLength[i].Count == 1 && descriptionLength[i].Count == 1 && Days[i].Count == 1 && Hours[i].Count == 1 && Minutes[i].Count == 1 &&
-                    Seconds[i].Count == 1 && Following[i].Count == 1 && Followers[i].Count == 1 && ratio[i].Count == 1 && TotalTweets[i].Count == 1 && TweetsPerDay[i].Count == 1 
-                    && averageLinks[i].Count == 1 && AverageUniqueLinks[i].Count == 1 && averageUsername[i].Count == 1 && AverageUniqueUsername[i].Count == 1 && changeRate[i].Count == 1)
-                {
-                    Is_Leaf[i] = true;
-                    LeafValues[i] = Datas[i].GroupBy(m => m.Label).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
-                }
-            }            
-            
-            if(FeaturesTaken.Count > 15)
+                Is_Leaf[1] = true;
+                LeafValues[1] = Datas[1].GroupBy(m => m.Label).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
+            }           
+
+            if (FeaturesTaken.Count > 67691)
             {
                 IsLeaf = true;
                 Children = null;
                 Value = TrainingData.GroupBy(m => m.Label).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
-                Feature = Features.None;
+                Feature = -1;
                 return;
             }
             
-            if(LeafValues.Distinct().ToList().Count == 1 && LeafValues.Any(x => x != -1))
+            if(LeafValues.Distinct().ToList().Count == 1 && LeafValues.Any(x => x != 0)) //Remember we check if the leaf values aren't 0 
             {
                 IsLeaf = true;
                 Children = null;
                 Value = LeafValues.First();
-                Feature = Features.None;
+                Feature = -1;
             }
             else
             {
-                List<Features> featuresTakenHelper = FeaturesTaken;
+                List<int> featuresTakenHelper = FeaturesTaken;
                 if (DepthRemaining > 1)
                 {
                     for (int i = 0; i < Datas.Count; i++)
                     {
-                        List<TrainingData> data = Datas[i];
+                        List<Entry> data = Datas[i];
                         Children.Add(new DecisionTree(Is_Leaf[i], ref data, LeafValues[i], DepthRemaining - 1, ref featuresTakenHelper, random));
                     }
                 }
@@ -433,7 +302,7 @@ namespace Assignment_1
                     {
                         if (Is_Leaf[i])
                         {
-                            List<TrainingData> data = Datas[i];
+                            List<Entry> data = Datas[i];
                             Children.Add(new DecisionTree(Is_Leaf[i], ref data, LeafValues[i], DepthRemaining - 1, ref featuresTakenHelper, random));
                         }
                         else
@@ -446,7 +315,7 @@ namespace Assignment_1
                             {
                                 if (Datas.Any(x => x.Count > 0)) //There is at least 1 list that contains data points
                                 {
-                                    List<TrainingData> sumofDatas = new List<TrainingData>();
+                                    List<Entry> sumofDatas = new List<Entry>();
                                     foreach (var item in Datas)
                                     {
                                         sumofDatas.AddRange(item);
@@ -458,56 +327,44 @@ namespace Assignment_1
                                     LeafValues[i] = (random.Next() % 2);
                                 }
                             }
-                            List<TrainingData> data = Datas[i];
+                            List<Entry> data = Datas[i];
                             Children.Add(new DecisionTree(true, ref data, LeafValues[i], DepthRemaining - 1, ref featuresTakenHelper, random));
                         }
                     }
-                    //if (IsLeftLeaf && IsRightLeaf)
-                    //{
-                    //    LeftTree = new DecisionTree(IsLeftLeaf, ref LeftData, LeftLeafValue, DepthRemaining - 1, ref featuresTakenHelper);
-                    //    RightTree = new DecisionTree(IsRightLeaf, ref RightData, RightLeafValue, DepthRemaining - 1, ref featuresTakenHelper);
-                    //}
-                    //else if (IsLeftLeaf)
-                    //{
-                    //    RightLeafValue = RightData.GroupBy(m => m.Label).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
-                    //    LeftTree = new DecisionTree(IsLeftLeaf, ref LeftData, LeftLeafValue, DepthRemaining - 1, ref featuresTakenHelper);
-                    //    RightTree = new DecisionTree(true, ref RightData, RightLeafValue, DepthRemaining - 1, ref featuresTakenHelper);
-                    //}
-                    //else if (IsRightLeaf)
-                    //{
-                    //    LeftLeafValue = LeftData.GroupBy(m => m.Label).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
-                    //    LeftTree = new DecisionTree(true, ref LeftData, LeftLeafValue, DepthRemaining - 1, ref featuresTakenHelper);
-                    //    RightTree = new DecisionTree(IsRightLeaf, ref RightData, RightLeafValue, DepthRemaining - 1, ref featuresTakenHelper);
-                    //}
-                    //else
-                    //{
-                    //    if (LeftData.Count == 0 && RightData.Count == 0)
-                    //    {
-                    //        LeftLeafValue = '-';
-                    //        RightLeafValue = '+';
-                    //    }
-                    //    else if (LeftData.Count == 0)
-                    //    {
-                    //        LeftLeafValue = RightData.GroupBy(m => m.Label).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
-                    //    }
-                    //    else if (RightData.Count == 0)
-                    //    {
-                    //        RightLeafValue = LeftData.GroupBy(m => m.Label).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
-                    //    }
-                    //    else
-                    //    {
-                    //        LeftLeafValue = LeftData.GroupBy(m => m.Label).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
-                    //        RightLeafValue = RightData.GroupBy(m => m.Label).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
-                    //    }
-                    //    LeftTree = new DecisionTree(true, ref LeftData, LeftLeafValue, DepthRemaining - 1, ref featuresTakenHelper);
-                    //    RightTree = new DecisionTree(true, ref RightData, RightLeafValue, DepthRemaining - 1, ref featuresTakenHelper);
-                    //}
                 }
             }            
         }
+
+        public bool ResultInLeaf(ref List<Entry> Data)
+        {
+            Dictionary<int, bool> Counts = new Dictionary<int, bool>();
+            for (int i = 1; i < 67693; i++)
+            {
+                int p = 0;
+                foreach (var item in Data)
+                {
+                    if (item.Vector.ContainsKey(i))
+                    {
+                        p++;
+                    }
+                }
+                if (p == Data.Count || p == 0)
+                {
+                    Counts.Add(i, true); //Means Yes that feature would result as a leaf
+                }
+                else
+                {
+                    Counts.Add(i, false); //Means No that feature wouldn't result as a leaf
+                }
+            }
+            return Counts.All(x => x.Value == true);
+        }
         public void PrintInformationGain()
         {
-            Console.WriteLine(informationGain.ToString());
+            foreach (var item in InformationGains)
+            {
+                Console.WriteLine("Feature #" + item.Key + "\n\tInformation Gain:\t" + item.Value);
+            }
         }
         public int DetermineDepth(int count)
         {
@@ -537,7 +394,7 @@ namespace Assignment_1
                         IsLeaf = true;
                         Value = Children[0].Value;
                         Children = null;
-                        Feature = Features.None;
+                        Feature = -1;
                     }
                 }
                 else
@@ -554,7 +411,7 @@ namespace Assignment_1
                             IsLeaf = true;
                             Value = Children[0].Value;
                             Children = null;
-                            Feature = Features.None;
+                            Feature = -1;
                         }
                     }
                 }
