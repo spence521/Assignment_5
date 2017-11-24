@@ -12,8 +12,8 @@ namespace Assignment_1
     {
         //public StreamReader reader { get; set; }
        // public StreamReader reader_2 { get; set; }
-        public List<Entry> data_1 { get; private set; }
-        public List<Entry> data_2 { get; private set; }
+        public List<Entry> Training_Data { get; private set; }
+        public List<Entry> Test_Data { get; private set; }
         public List<Entry> Cross_Validate_Data { get; private set; }
         public List<Entry> Cross_1 { get; private set; }
         public List<Entry> Cross_2 { get; private set; }
@@ -37,33 +37,33 @@ namespace Assignment_1
         {
             Forest = new List<BaggedForest>();
             Training_Data_Forest = new List<Entry>();
-            data_1 = new List<Entry>();
-            data_2 = new List<Entry>();
+            Training_Data = new List<Entry>();
+            Test_Data = new List<Entry>();
             SetData(r, r2);
             //SetTrainingData();
-            Training_Data_Forest = data_1;
+            Training_Data_Forest = Training_Data;
 
             for (int i = 0; i < ForestSize; i++)
             {
-                data_1 = new List<Entry>();
-                data_2 = new List<Entry>();
+                Training_Data = new List<Entry>();
+                Test_Data = new List<Entry>();
                 SetData(r, r2);
                 //SetTrainingData();
                 List<Entry> trainingDataHelper = Training_Data_Forest.GetRange(0, 100);
                 Tree = new DecisionTree(ref trainingDataHelper, depth, rand);
                 Tree.CollapseTree();
-                List<Entry> testDataHelper = data_2;
-                Error = (Convert.ToDouble(Tree.DetermineError(ref testDataHelper)) / Convert.ToDouble(data_2.Count)) * 100;
+                List<Entry> testDataHelper = Test_Data;
+                Error = (Convert.ToDouble(Tree.DetermineError(ref testDataHelper)) / Convert.ToDouble(Test_Data.Count)) * 100;
                 Accuracy = 100 - Error;
                 Depth = Tree.DetermineDepth(0);
                 ShuffleForestData(rand);
 
-                data_1 = new List<Entry>();
-                data_2 = new List<Entry>();
-                SetData(r2);
+                Training_Data = new List<Entry>();
+                Test_Data = new List<Entry>();
+                SetData(r2); // setting the test data equal to Training_Data Here.
                 //SetTrainingData();
                 Tree.Labels = new List<int>();
-                trainingDataHelper = data_1; //this is really the test data
+                trainingDataHelper = Training_Data; //this is really the test data
                 Tree.DetermineError(ref trainingDataHelper);
 
                 Forest.Add(new BaggedForest(Accuracy, Tree.Labels));
@@ -264,7 +264,7 @@ namespace Assignment_1
                         Vector.Add(Convert.ToInt32(s[0]), Convert.ToDouble(s[1]));
                     }
                 }
-                data_1.Add(new Entry(Sign, Vector));
+                Training_Data.Add(new Entry(Sign, Vector));
             }
             if (reader_2 != null)
             {
@@ -286,14 +286,14 @@ namespace Assignment_1
                             Vector.Add(Convert.ToInt32(s[0]), Convert.ToDouble(s[1]));
                         }
                     }
-                    data_2.Add(new Entry(Sign, Vector));
+                    Test_Data.Add(new Entry(Sign, Vector));
                 }
             }
         }
         public void PrintData1()
         {
             int i = 1;
-            foreach (var item in data_1)
+            foreach (var item in Training_Data)
             {
                 Console.WriteLine(i + "\t" + item.Label + " " + item.Vector.ToString());
                 i++;
@@ -302,7 +302,7 @@ namespace Assignment_1
         public void PrintData2()
         {
             int i = 1;
-            foreach (var item in data_2)
+            foreach (var item in Test_Data)
             {
                 Console.WriteLine(i + "\t" + item.Label + " " + item.Vector.ToString());
                 i++;
@@ -341,63 +341,7 @@ namespace Assignment_1
             double AverageOfValues = list.Average();
             double SumOfValues = list.Sum(r => Math.Pow(r - AverageOfValues, 2));
             return Math.Sqrt((SumOfValues) / (list.Count));
-        }
-        public void SetValidateData(StreamReader reader, StreamReader reader_2, Random rSeed)
-        {
-            reader.DiscardBufferedData();
-            reader.BaseStream.Seek(0, System.IO.SeekOrigin.Begin);
-            string line;
-            while ((line = reader.ReadLine()) != null)
-            {
-                int Sign;
-                double[] Vector = new double[16];
-                string[] splitstring = line.Split();
-                if (splitstring.First().First() == '1') { Sign = 1; }
-                else { Sign = 0; }
-                foreach (var item in splitstring)
-                {
-                    if (item.Contains(":"))
-                    {
-                        string[] s = item.Split(':');
-                        Vector[Convert.ToInt32(s[0]) - 1] = Convert.ToDouble(s[1]);
-                    }
-                }
-                Cross_Validate_Data.Add(new Entry(Sign, Vector));
-            }
-            reader_2.DiscardBufferedData();
-            reader_2.BaseStream.Seek(0, System.IO.SeekOrigin.Begin);
-            string line2;
-            while ((line2 = reader_2.ReadLine()) != null)
-            {
-                int Sign;
-                double[] Vector = new double[16];
-                string[] splitstring = line2.Split();
-                if (splitstring.First().First() == '1') { Sign = 1; }
-                else { Sign = 0; }
-                foreach (var item in splitstring)
-                {
-                    if (item.Contains(":"))
-                    {
-                        string[] s = item.Split(':');
-                        Vector[Convert.ToInt32(s[0]) - 1] = Convert.ToDouble(s[1]);
-                    }
-                }
-                Cross_Validate_Data.Add(new Entry(Sign, Vector));
-            }
-            Cross_Validate_Data = Cross_Validate_Data.OrderBy(i => rSeed.Next()).ToList();
-            Cross_Validate_Data = Cross_Validate_Data.OrderBy(i => rSeed.Next()).ToList();
-            Cross_Validate_Data = Cross_Validate_Data.OrderBy(i => rSeed.Next()).ToList();
-            Cross_Validate_Data = Cross_Validate_Data.OrderBy(i => rSeed.Next()).ToList();
-            Cross_Validate_Data = Cross_Validate_Data.OrderBy(i => rSeed.Next()).ToList();
-            Cross_Validate_Data = Cross_Validate_Data.OrderBy(i => rSeed.Next()).ToList();
-            int seperator = Convert.ToInt32(Math.Floor(Convert.ToDecimal(Cross_Validate_Data.Count) / 5M));
-            Cross_1 = Cross_Validate_Data.GetRange(0, seperator);
-            Cross_2 = Cross_Validate_Data.GetRange(seperator, seperator);
-            Cross_3 = Cross_Validate_Data.GetRange(2 * seperator, seperator);
-            Cross_4 = Cross_Validate_Data.GetRange(3 * seperator, seperator);
-            Cross_5 = Cross_Validate_Data.GetRange(4 * seperator, Cross_Validate_Data.Count - (4 * seperator));
-        }
-
+        }        
         public void TraverseTree()
         {
             Tree.TraverseTree();
@@ -416,15 +360,15 @@ namespace Assignment_1
             }
             return predictions;
         }
-        public void SetAveragedPredictions()
-        {
-            for (int i = 0; i < Predictions.Count; i++)
-            {
-                List<int> items = new List<int> { Predictions[i].Label, Predictions2[i].Label, Predictions3[i].Label, Predictions4[i].Label, Predictions5[i].Label };
-                int prediction = items.GroupBy(m => m).OrderByDescending(g => g.Count()).Select(g => g.Key).First();
-                Predictions_Average.Add(new Prediction(Predictions[i].Id, prediction));
-            }
-        }
+        //public void SetAveragedPredictions()
+        //{
+        //    for (int i = 0; i < Predictions.Count; i++)
+        //    {
+        //        List<int> items = new List<int> { Predictions[i].Label, Predictions2[i].Label, Predictions3[i].Label, Predictions4[i].Label, Predictions5[i].Label };
+        //        int prediction = items.GroupBy(m => m).OrderByDescending(g => g.Count()).Select(g => g.Key).First();
+        //        Predictions_Average.Add(new Prediction(Predictions[i].Id, prediction));
+        //    }
+        //}
         private void ShuffleForestData(Random rand)
         {
             Training_Data_Forest = Training_Data_Forest.OrderBy(i => rand.Next()).ToList();

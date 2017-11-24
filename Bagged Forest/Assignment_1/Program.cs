@@ -36,7 +36,7 @@ namespace Assignment_1
                 Test = File.OpenText(args[1]);
                 if (args.Length > 4) { depth = Convert.ToInt32(args[4]); }
                 int ForestSize = 1;
-                Data DataTree = new Data(Train, Test, 3, r, ForestSize);
+                Data DataTree = new Data(Train, Test, int.MaxValue, r, ForestSize);
 
                 List<int> FinalPredictions = new List<int>();
                 for (int i = 0; i < DataTree.Forest[0].Predictions.Count; i++)
@@ -50,6 +50,16 @@ namespace Assignment_1
                     // int ID = DataTree.Forest[1].Predictions[i].Id;
                     FinalPredictions.Add(Most_Occured_Label); //This is adding in increasing order of the test set
                 }
+                int correct_labeling = 0;
+                for (int i = 0; i < 940 /*Test data size*/; i++)
+                {
+                    if(DataTree.Training_Data[i].Label == FinalPredictions[i]) //correct labeling
+                    {
+                        correct_labeling++;
+                    }
+                }
+                double Accuracy = (correct_labeling / FinalPredictions.Count) * 100;
+                Console.WriteLine("Test Set Accuracy:\t" + Accuracy);
             
                 //BaggedForest BestTree = DataTree.Forest.OrderByDescending(x => x.Accuracy).First();
                 // public Data(Random rand, StreamReader r, StreamReader r2, StreamReader eval, StreamReader eval_ID, int depth)
@@ -65,7 +75,7 @@ namespace Assignment_1
                 //GenerateCSV(data.Predictions_Average, @"\Decision_Tree_Average.csv");
                 //
 
-                GenerateCSV(FinalPredictions, "Bagged_Forest.csv");
+                //GenerateCSV(FinalPredictions, "Bagged_Forest.csv");
                 Console.WriteLine(DataTree.Depth);
             }
 
@@ -89,19 +99,7 @@ namespace Assignment_1
             //Console.ReadKey(false);
             #endregion
         }
-        static void GenerateCSV(List<Prediction> predictions, string name)
-        {
-            StringBuilder csv = new StringBuilder();
-            string startupPath = System.IO.Directory.GetCurrentDirectory();
-            string Path = startupPath  + name;
-            csv.AppendLine("Id,Prediction");
-
-            foreach (var item in predictions)
-            {
-                csv.AppendLine(string.Format("{0},{1}", item.Id, item.Label));
-            }
-            File.AppendAllText(Path, csv.ToString());
-        }
+        
         //static decimal helper(double P, double N)
         //{
         //    return decimal.Parse(((-P * Math.Log(P, 2)) - (N * Math.Log(N, 2))).ToString());
