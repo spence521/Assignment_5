@@ -60,14 +60,15 @@ namespace Assignement_2
                         {
                             if (w.ContainsKey(xi.Key)) //if contains key
                             {
-                                w[xi.Key] = ((1 - Learning_Rate) * (2 * w[xi.Key] / Tradeoff)) + ((Learning_Rate * -y * xi.Value) / (Math.Exp(y * xw) + 1));
+                                w[xi.Key] = ((1 - (2 * Learning_Rate / Tradeoff)) * w[xi.Key] ) + ((Learning_Rate * y * xi.Value) / (Math.Exp(y * xw) + 1));
                             }
                             else //if doesn't contain key, it would x[wi.Key] would result to 0, so:
                             {
-                                w[xi.Key] = ((1 - Learning_Rate) * (2 * RandomNumber() / Tradeoff)) + ((Learning_Rate * -y * xi.Value) / (Math.Exp(y * xw) + 1));
+                                w[xi.Key] = ((1 - (2 * Learning_Rate / Tradeoff)) * RandomNumber()) + ((Learning_Rate * y * xi.Value) / (Math.Exp(y * xw) + 1));
                             }
                         }
-                        b = ((1 - Learning_Rate) * (2 * b / Tradeoff)) + ((Learning_Rate * -y) / (Math.Exp(y * b) + 1));
+                        b = ((1 - (2 * Learning_Rate / Tradeoff)) * b) + ((Learning_Rate * y) / (Math.Exp(y * b) + 1));
+
                         errors++;
                     }
                     else
@@ -76,14 +77,14 @@ namespace Assignement_2
                         {
                             if (w.ContainsKey(xi.Key))
                             {
-                                w[xi.Key] = ((1 - Learning_Rate) * (2 * w[xi.Key] / Tradeoff));
+                                w[xi.Key] = ((1 - (2 * Learning_Rate / Tradeoff)) * w[xi.Key]);
                             }
                             else
                             {
-                                w[xi.Key] = ((1 - Learning_Rate) * (2 * RandomNumber() / Tradeoff));
+                                w[xi.Key] = ((1 - (2 * Learning_Rate / Tradeoff)) * RandomNumber());
                             }
                         }
-                        b = ((1 - Learning_Rate) * (2 * b / Tradeoff));
+                        b = ((1 - (2 * Learning_Rate / Tradeoff)) * b);
                     }
                 }
                 else //Support Vector Machine (SVM)

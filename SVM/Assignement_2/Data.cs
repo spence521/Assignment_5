@@ -160,7 +160,6 @@ namespace Assignement_2
             //}
             
             WeightBias wb = new WeightBias(w, b, 0);
-            Console.WriteLine("Training Data: ");
             for (int i = 0; i < epochs; i++)
             {
                 wb = perceptron.CalculateWB(wb);

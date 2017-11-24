@@ -28,3 +28,9 @@ C:\Users\Spencer\Documents\College\CS 6350 - Machine Learning\Homework #5\SVM\As
 C:\Users\Spencer\Documents\College\CS 6350 - Machine Learning\Homework #5\SVM\Assignement_2\bin\Debug\Assignement_2.exe
 C:\Users\Spencer\Documents\College\CS 6350 - Machine Learning\Homework #5\SVM\Assignement_2\bin\Debug\Assignement_2.pdb
 C:\Users\Spencer\Documents\College\CS 6350 - Machine Learning\Homework #5\SVM\Assignement_2\obj\Debug\Assignement_2.csprojResolveAssemblyReference.cache
+C:\Users\Spencer\Documents\College\CS 6350 - Machine Learning\Homework #5\Code-HW5\SVM\Assignement_2\bin\Debug\Assignement_2.exe.config
+C:\Users\Spencer\Documents\College\CS 6350 - Machine Learning\Homework #5\Code-HW5\SVM\Assignement_2\obj\Debug\Assignement_2.exe
+C:\Users\Spencer\Documents\College\CS 6350 - Machine Learning\Homework #5\Code-HW5\SVM\Assignement_2\obj\Debug\Assignement_2.pdb
+C:\Users\Spencer\Documents\College\CS 6350 - Machine Learning\Homework #5\Code-HW5\SVM\Assignement_2\obj\Debug\Assignement_2.csprojResolveAssemblyReference.cache
+C:\Users\Spencer\Documents\College\CS 6350 - Machine Learning\Homework #5\Code-HW5\SVM\Assignement_2\bin\Debug\Assignement_2.exe
+C:\Users\Spencer\Documents\College\CS 6350 - Machine Learning\Homework #5\Code-HW5\SVM\Assignement_2\bin\Debug\Assignement_2.pdb

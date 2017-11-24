@@ -218,71 +218,71 @@ namespace Assignement_2
             #region Part 1 (SVM)
             Data dataEval;
             Data dataTest;
-            //#region Datas
-            //data1 = new Data(10, 10     /*Learning Rate*/, 0 /*Margin*/, 10 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data2 = new Data(10, 1      /*Learning Rate*/, 0 /*Margin*/, 10 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data3 = new Data(10, 0.1    /*Learning Rate*/, 0 /*Margin*/, 10 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data4 = new Data(10, 0.01   /*Learning Rate*/, 0 /*Margin*/, 10 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data5 = new Data(10, 0.001  /*Learning Rate*/, 0 /*Margin*/, 10 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data6 = new Data(10, 0.0001 /*Learning Rate*/, 0 /*Margin*/, 10 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data7 = new Data(10, 10     /*Learning Rate*/, 0 /*Margin*/, 1 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data8 = new Data(10, 1      /*Learning Rate*/, 0 /*Margin*/, 1 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data9 = new Data(10, 0.1    /*Learning Rate*/, 0 /*Margin*/, 1 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data10 = new Data(10, 0.01   /*Learning Rate*/, 0 /*Margin*/, 1 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data11 = new Data(10, 0.001  /*Learning Rate*/, 0 /*Margin*/, 1 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data12 = new Data(10, 0.0001 /*Learning Rate*/, 0 /*Margin*/, 1 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data13 = new Data(10, 10     /*Learning Rate*/, 0 /*Margin*/, 0.1 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data14 = new Data(10, 1      /*Learning Rate*/, 0 /*Margin*/, 0.1 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data15 = new Data(10, 0.1    /*Learning Rate*/, 0 /*Margin*/, 0.1 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data16 = new Data(10, 0.01   /*Learning Rate*/, 0 /*Margin*/, 0.1 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data17 = new Data(10, 0.001  /*Learning Rate*/, 0 /*Margin*/, 0.1 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data18 = new Data(10, 0.0001 /*Learning Rate*/, 0 /*Margin*/, 0.1 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data19 = new Data(10, 10     /*Learning Rate*/, 0 /*Margin*/, 0.01 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data20 = new Data(10, 1      /*Learning Rate*/, 0 /*Margin*/, 0.01 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data21 = new Data(10, 0.1    /*Learning Rate*/, 0 /*Margin*/, 0.01 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data22 = new Data(10, 0.01   /*Learning Rate*/, 0 /*Margin*/, 0.01 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data23 = new Data(10, 0.001  /*Learning Rate*/, 0 /*Margin*/, 0.01 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data24 = new Data(10, 0.0001 /*Learning Rate*/, 0 /*Margin*/, 0.01 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data25 = new Data(10, 10     /*Learning Rate*/, 0 /*Margin*/, 0.001 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data26 = new Data(10, 1      /*Learning Rate*/, 0 /*Margin*/, 0.001 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data27 = new Data(10, 0.1    /*Learning Rate*/, 0 /*Margin*/, 0.001 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data28 = new Data(10, 0.01   /*Learning Rate*/, 0 /*Margin*/, 0.001 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data29 = new Data(10, 0.001  /*Learning Rate*/, 0 /*Margin*/, 0.001 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data30 = new Data(10, 0.0001 /*Learning Rate*/, 0 /*Margin*/, 0.001 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data31 = new Data(10, 10     /*Learning Rate*/, 0 /*Margin*/, 0.0001 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data32 = new Data(10, 1      /*Learning Rate*/, 0 /*Margin*/, 0.0001 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data33 = new Data(10, 0.1    /*Learning Rate*/, 0 /*Margin*/, 0.0001 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data34 = new Data(10, 0.01   /*Learning Rate*/, 0 /*Margin*/, 0.0001 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data35 = new Data(10, 0.001  /*Learning Rate*/, 0 /*Margin*/, 0.0001 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data36 = new Data(10, 0.0001 /*Learning Rate*/, 0 /*Margin*/, 0.0001 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //#endregion
-            //List<Data> ListOfDatas = new List<Data>()
-            //    {
-            //        data1, data2, data3, data4 , data5 , data6 , data7 , data8 , data9 , data10, data11,
-            //        data12, data13, data14, data15, data16, data17, data18, data19, data20, data21, data22, data23, data24, data25, data26,
-            //        data27, data28, data29, data30, data31, data32, data33, data34, data35, data36
-            //    };
-            //Data LargestData = ListOfDatas.OrderByDescending(w => w.Accuracy).First();
-            //double learning_rate = LargestData.Learning_Rate; //0.0001
-            //double c = LargestData.C; //10
-            //Console.WriteLine("\n*******SVM (Part 1)*******");
-            //Console.WriteLine("The best hyperparameters are: \n\t" + "Learning Rate:\t" + learning_rate
-            //    + "\n\t" + "Regularization/Loss Tradeoff:\t" + c);
-            //dataTest = new Data(Train, Test, r, 20, learning_rate, 0, c, false, 0);
-            //Console.WriteLine("The total number of updates/mistakes for the best Weight and Bias: \n\t" + dataTest.BestWeightBias.Updates);
-            //Console.WriteLine("Training Set Accuracy: \n\t" + Math.Round(dataTest.Training_Accuracy, 3));
-            //Console.WriteLine("Test Set Accuracy: \n\t" + Math.Round(dataTest.Accuracy, 3));
-            //Console.WriteLine("---------------------------------------------------------------------------------------");
+            #region Datas
+            data1 = new Data(10, 10     /*Learning Rate*/, 0 /*Margin*/, 10 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data2 = new Data(10, 1      /*Learning Rate*/, 0 /*Margin*/, 10 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data3 = new Data(10, 0.1    /*Learning Rate*/, 0 /*Margin*/, 10 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data4 = new Data(10, 0.01   /*Learning Rate*/, 0 /*Margin*/, 10 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data5 = new Data(10, 0.001  /*Learning Rate*/, 0 /*Margin*/, 10 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data6 = new Data(10, 0.0001 /*Learning Rate*/, 0 /*Margin*/, 10 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data7 = new Data(10, 10     /*Learning Rate*/, 0 /*Margin*/, 1 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data8 = new Data(10, 1      /*Learning Rate*/, 0 /*Margin*/, 1 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data9 = new Data(10, 0.1    /*Learning Rate*/, 0 /*Margin*/, 1 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data10 = new Data(10, 0.01   /*Learning Rate*/, 0 /*Margin*/, 1 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data11 = new Data(10, 0.001  /*Learning Rate*/, 0 /*Margin*/, 1 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data12 = new Data(10, 0.0001 /*Learning Rate*/, 0 /*Margin*/, 1 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data13 = new Data(10, 10     /*Learning Rate*/, 0 /*Margin*/, 0.1 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data14 = new Data(10, 1      /*Learning Rate*/, 0 /*Margin*/, 0.1 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data15 = new Data(10, 0.1    /*Learning Rate*/, 0 /*Margin*/, 0.1 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data16 = new Data(10, 0.01   /*Learning Rate*/, 0 /*Margin*/, 0.1 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data17 = new Data(10, 0.001  /*Learning Rate*/, 0 /*Margin*/, 0.1 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data18 = new Data(10, 0.0001 /*Learning Rate*/, 0 /*Margin*/, 0.1 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data19 = new Data(10, 10     /*Learning Rate*/, 0 /*Margin*/, 0.01 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data20 = new Data(10, 1      /*Learning Rate*/, 0 /*Margin*/, 0.01 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data21 = new Data(10, 0.1    /*Learning Rate*/, 0 /*Margin*/, 0.01 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data22 = new Data(10, 0.01   /*Learning Rate*/, 0 /*Margin*/, 0.01 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data23 = new Data(10, 0.001  /*Learning Rate*/, 0 /*Margin*/, 0.01 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data24 = new Data(10, 0.0001 /*Learning Rate*/, 0 /*Margin*/, 0.01 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data25 = new Data(10, 10     /*Learning Rate*/, 0 /*Margin*/, 0.001 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data26 = new Data(10, 1      /*Learning Rate*/, 0 /*Margin*/, 0.001 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data27 = new Data(10, 0.1    /*Learning Rate*/, 0 /*Margin*/, 0.001 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data28 = new Data(10, 0.01   /*Learning Rate*/, 0 /*Margin*/, 0.001 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data29 = new Data(10, 0.001  /*Learning Rate*/, 0 /*Margin*/, 0.001 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data30 = new Data(10, 0.0001 /*Learning Rate*/, 0 /*Margin*/, 0.001 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data31 = new Data(10, 10     /*Learning Rate*/, 0 /*Margin*/, 0.0001 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data32 = new Data(10, 1      /*Learning Rate*/, 0 /*Margin*/, 0.0001 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data33 = new Data(10, 0.1    /*Learning Rate*/, 0 /*Margin*/, 0.0001 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data34 = new Data(10, 0.01   /*Learning Rate*/, 0 /*Margin*/, 0.0001 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data35 = new Data(10, 0.001  /*Learning Rate*/, 0 /*Margin*/, 0.0001 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data36 = new Data(10, 0.0001 /*Learning Rate*/, 0 /*Margin*/, 0.0001 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            #endregion
+            List<Data> ListOfDatas = new List<Data>()
+                {
+                    data1, data2, data3, data4 , data5 , data6 , data7 , data8 , data9 , data10, data11,
+                    data12, data13, data14, data15, data16, data17, data18, data19, data20, data21, data22, data23, data24, data25, data26,
+                    data27, data28, data29, data30, data31, data32, data33, data34, data35, data36
+                };
+            Data LargestData = ListOfDatas.OrderByDescending(w => w.Accuracy).First();
+            double learning_rate = LargestData.Learning_Rate; //0.0001
+            double c = LargestData.C; //10
+            Console.WriteLine("\n*******SVM (Part 1)*******");
+            Console.WriteLine("The best hyperparameters are: \n\t" + "Learning Rate:\t" + learning_rate
+                + "\n\t" + "Regularization/Loss Tradeoff:\t" + c);
+            dataTest = new Data(Train, Test, r, 20, learning_rate, 0, c, false, 0);
+            Console.WriteLine("The total number of updates/mistakes for the best Weight and Bias: \n\t" + dataTest.BestWeightBias.Updates);
+            Console.WriteLine("Training Set Accuracy: \n\t" + Math.Round(dataTest.Training_Accuracy, 3));
+            Console.WriteLine("Test Set Accuracy: \n\t" + Math.Round(dataTest.Accuracy, 3));
+            Console.WriteLine("---------------------------------------------------------------------------------------");
             #endregion
 
             #region Part 2 (Logistic Regression)
             #region Datas
-            //data1 = new Data(10, 10     /*Learning Rate*/, 0, 0, true, 0.1, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data2 = new Data(10, 1      /*Learning Rate*/, 0, 0, true, 0.1, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data3 = new Data(10, 0.1    /*Learning Rate*/, 0, 0, true, 0.1, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data4 = new Data(10, 0.01   /*Learning Rate*/, 0, 0, true, 0.1, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data5 = new Data(10, 0.001  /*Learning Rate*/, 0, 0, true, 0.1, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data6 = new Data(10, 0.0001 /*Learning Rate*/, 0, 0, true, 0.1, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data1 = new Data(10, 10     /*Learning Rate*/, 0, 0, true, 0.1, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data2 = new Data(10, 1      /*Learning Rate*/, 0, 0, true, 0.1, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data3 = new Data(10, 0.1    /*Learning Rate*/, 0, 0, true, 0.1, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data4 = new Data(10, 0.01   /*Learning Rate*/, 0, 0, true, 0.1, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data5 = new Data(10, 0.001  /*Learning Rate*/, 0, 0, true, 0.1, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data6 = new Data(10, 0.0001 /*Learning Rate*/, 0, 0, true, 0.1, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
             data7 = new Data(10, 10     /*Learning Rate*/, 0, 0, true, 1, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
             data8 = new Data(10, 1      /*Learning Rate*/, 0, 0, true, 1, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
             data9 = new Data(10, 0.1    /*Learning Rate*/, 0, 0, true, 1, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
@@ -307,27 +307,23 @@ namespace Assignement_2
             data28 = new Data(10, 0.01   /*Learning Rate*/, 0, 0, true, 1000, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
             data29 = new Data(10, 0.001  /*Learning Rate*/, 0, 0, true, 1000, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
             data30 = new Data(10, 0.0001 /*Learning Rate*/, 0, 0, true, 1000, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data31 = new Data(10, 10     /*Learning Rate*/, 0, 0, true, 10000, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data32 = new Data(10, 1      /*Learning Rate*/, 0, 0, true, 10000, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data33 = new Data(10, 0.1    /*Learning Rate*/, 0, 0, true, 10000, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data34 = new Data(10, 0.01   /*Learning Rate*/, 0, 0, true, 10000, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data35 = new Data(10, 0.001  /*Learning Rate*/, 0, 0, true, 10000, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
-            //data36 = new Data(10, 0.0001 /*Learning Rate*/, 0, 0, true, 10000, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data31 = new Data(10, 10     /*Learning Rate*/, 0, 0, true, 10000, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data32 = new Data(10, 1      /*Learning Rate*/, 0, 0, true, 10000, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data33 = new Data(10, 0.1    /*Learning Rate*/, 0, 0, true, 10000, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data34 = new Data(10, 0.01   /*Learning Rate*/, 0, 0, true, 10000, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data35 = new Data(10, 0.001  /*Learning Rate*/, 0, 0, true, 10000, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
+            data36 = new Data(10, 0.0001 /*Learning Rate*/, 0, 0, true, 10000, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
             #endregion
-            List<Data> ListOfDatas = new List<Data>()
+            ListOfDatas = new List<Data>()
                 {
-                    /*data1, data2, data3, data4 , data5 , data6 ,*/ data7 , data8 , data9 , data10, data11,
+                    data1, data2, data3, data4 , data5 , data6 , data7 , data8 , data9 , data10, data11,
                     data12, data13, data14, data15, data16, data17, data18, data19, data20, data21, data22, data23, data24, data25, data26,
-                    data27, data28, data29, data30/*, data31, data32, data33, data34, data35, data36*/
+                    data27, data28, data29, data30, data31, data32, data33, data34, data35, data36
                 };
-            foreach (var item in ListOfDatas)
-            {
-                Console.WriteLine("Learning Rate:\t" + item.Learning_Rate + "\tTradeoff:\t" + item.Tradeoff + "\tTest Accuracy:\t" + item.Accuracy);
-            }
 
-            Data LargestData = ListOfDatas.OrderByDescending(w => w.Accuracy).First();
-            double learning_rate = LargestData.Learning_Rate; //
-            double tradeoff = LargestData.Tradeoff; //
+            LargestData = ListOfDatas.OrderByDescending(w => w.Accuracy).First();
+            learning_rate = LargestData.Learning_Rate; //0.01
+            double tradeoff = LargestData.Tradeoff; //10000
             Console.WriteLine("\n*******Logistic Regression (Part 2)*******");
             Console.WriteLine("The best hyperparameters are: \n\t" + "Learning Rate:\t" + learning_rate
                 + "\n\t" + "Tradeoff:\t" + tradeoff);
@@ -338,7 +334,7 @@ namespace Assignement_2
             Console.WriteLine("---------------------------------------------------------------------------------------");
             #endregion
 
-            Console.ReadKey(false);
+            //Console.ReadKey(false);
             #endregion
         }
         static void GenerateCSV(List<Prediction> predictions, string name)
