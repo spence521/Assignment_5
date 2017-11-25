@@ -27,10 +27,22 @@ namespace Assignment_1
         public Random random { get; set; }
         public int Feature { get; set; }
 
-        public DecisionTree(ref List<Entry> trainingdata, int depth, Random r)
+        //Things needed for Naive Bayes
+        public bool Naive_Bayes { get; set; }
+        public double Smoothing_Term { get; set; }
+        public List<Entry> TestData { get; private set; }
+        public List<int> Test_Labels { get; set; }
+        public double Test_Accuracy { get; set; }
+
+        public DecisionTree(ref List<Entry> trainingdata, List<Entry> testdata, int depth, Random r, bool naive_bayes, double smoothing_term)
         {
+            Naive_Bayes = naive_bayes;
+            Smoothing_Term = smoothing_term;
+            TestData = testdata;
+
             random = r;
             Labels = new List<int>();
+            Test_Labels = new List<int>();
             InformationGains = new Dictionary<int, double>();
             FeaturesTaken = new List<int>();
             IsLeaf = false;
@@ -38,21 +50,27 @@ namespace Assignment_1
             Value = 0; //A negative one leaf value mean its not a leaf. 1 is positive label, -1 is negative label
             DepthRemaining = depth;
             TrainingData = trainingdata;
-            SetEntropy();
+            if (!Naive_Bayes) { SetEntropy(); }
             SetInformationGain();
-            DetermineFeature();
-            FeaturesTaken.Add(Feature);
-            DetermineSubTrees();
+
+            if (!Naive_Bayes)
+            {
+                DetermineFeature();
+                FeaturesTaken.Add(Feature);
+                DetermineSubTrees();
+            }
         }
 
-        public DecisionTree(bool isLeaf, ref List<Entry> trainingdata, int value, int depthRemaining, ref List<int> featuresTaken, Random r)
+        public DecisionTree(bool isLeaf, ref List<Entry> trainingdata, int value, int depthRemaining, ref List<int> featuresTaken, Random r, bool naive_bayes)
         {
+            Naive_Bayes = naive_bayes;
             random = r;
             IsLeaf = isLeaf;
             InformationGains = new Dictionary<int, double>();
             Children = new List<DecisionTree>();
             DepthRemaining = depthRemaining;
             Value = value;
+            Console.WriteLine(depthRemaining);
             if (!IsLeaf)
             {
                 FeaturesTaken = featuresTaken;
@@ -97,15 +115,15 @@ namespace Assignment_1
             Dictionary<int, double> Counts10 = new Dictionary<int, double>();
             Dictionary<int, double> Counts01 = new Dictionary<int, double>();
             Dictionary<int, double> Counts00 = new Dictionary<int, double>();
-            int Positive_Labels = 0;
-            int Negative_Labels = 0;
+            double Positive_Labels = 0;
+            double Negative_Labels = 0;
             foreach (var example in TrainingData)
             {
                 if (example.Label == 1)
                 {
                     for (int i = 1; i < 67693; i++)
                     {
-                        if(example.Vector.ContainsKey(i)) //This means that the feature is +1 and the true label is +1
+                        if (example.Vector.ContainsKey(i)) //This means that the feature is +1 and the true label is +1
                         {
                             if (Counts11.ContainsKey(i))
                             {
@@ -160,18 +178,135 @@ namespace Assignment_1
                     Negative_Labels++;
                 }
             }
-            
-            for (int i = 1; i < 67693; i++)
-            {
-                double PosLabel_PosFeature = Counts11.ContainsKey(i) ? Counts11[i] : 0;
-                double NegLabel_PosFeature = Counts01.ContainsKey(i) ? Counts01[i] : 0;
-                double PosLabel_NegFeature = Counts10.ContainsKey(i) ? Counts10[i] : 0;
-                double NegLabel_NegFeature = Counts00.ContainsKey(i) ? Counts00[i] : 0;
-                InformationGains.Add(i, CalculateInformationGain(Positive_Labels, Negative_Labels, PosLabel_PosFeature, NegLabel_PosFeature, PosLabel_NegFeature, NegLabel_NegFeature));
-            }
 
-           
-    }
+            if (!Naive_Bayes) //Do Decision tree Stuff
+            {
+                for (int i = 1; i < 67693; i++)
+                {
+                    double PosLabel_PosFeature = Counts11.ContainsKey(i) ? Counts11[i] : 0;
+                    double NegLabel_PosFeature = Counts01.ContainsKey(i) ? Counts01[i] : 0;
+                    double PosLabel_NegFeature = Counts10.ContainsKey(i) ? Counts10[i] : 0;
+                    double NegLabel_NegFeature = Counts00.ContainsKey(i) ? Counts00[i] : 0;
+                    InformationGains.Add(i, CalculateInformationGain(Positive_Labels, Negative_Labels, PosLabel_PosFeature, NegLabel_PosFeature, PosLabel_NegFeature, NegLabel_NegFeature));
+                }
+            }
+            else // Do Naive Bayes Stuff
+            {
+                double Prob_Yes = Positive_Labels / TrainingData.Count;
+                double Prob_No = Negative_Labels / TrainingData.Count;
+                //the Si is equal to 2, So i just put 2 there.
+                double bottom_Pos = Positive_Labels + (2 * Smoothing_Term);
+                double bottom_Neg = Negative_Labels + (2 * Smoothing_Term);
+                for (int i = 1; i < 67693; i++)
+                {                     
+                    if(Counts11.ContainsKey(i)) { Counts11[i] = (Counts11[i] + Smoothing_Term) / bottom_Pos; }
+                    else { Counts11.Add(i, Smoothing_Term / bottom_Pos); }
+
+                    if (Counts10.ContainsKey(i)) { Counts10[i] = (Counts10[i] + Smoothing_Term) / bottom_Pos; }
+                    else { Counts10.Add(i, Smoothing_Term / bottom_Pos); }
+
+                    if (Counts01.ContainsKey(i)) { Counts01[i] = (Counts01[i] + Smoothing_Term) / bottom_Neg; }
+                    else { Counts01.Add(i, Smoothing_Term / bottom_Pos); }
+
+                    if (Counts00.ContainsKey(i)) { Counts00[i] = (Counts00[i] + Smoothing_Term) / bottom_Neg; }
+                    else { Counts00.Add(i, Smoothing_Term / bottom_Pos); }
+                }
+                int correct_values = 0;
+                int poss = 0;
+                int inff = 0;
+                foreach (var example in TrainingData)
+                {
+                    double Pos = Prob_Yes * double.MaxValue * 2;
+                    double Neg = Prob_No * double.MaxValue * 2;
+                    for (int i = 1; i < 67693; i++)
+                    {
+                        if (example.Vector.ContainsKey(i)) // That means that feature value is 1
+                        {
+                            Pos = Pos * Counts11[i];// * 1.022;
+                        }
+                        else //That means the feature value is -1
+                        {
+                            Pos = Pos * Counts10[i];// * 1.022;
+                        }
+                        if (example.Vector.ContainsKey(i)) // That means that feature value is 1
+                        {
+                            Neg = Neg * Counts01[i];// * 1.022;
+                        }
+                        else //That means the feature value is -1
+                        {
+                            Neg = Neg * Counts00[i];// * 1.022;
+                        }
+                    }
+                    int yguess;
+                    if(Pos == 0) {  poss++; }
+                    if (Neg == 0) { poss++; }
+                    if (double.IsInfinity(Pos)) { inff++; }
+                    if (double.IsInfinity(Neg)) {  inff++; }
+                    if (Pos >= Neg)
+                    {
+                        yguess = 1;
+                    }
+                    else
+                    {
+                        yguess = -1;
+                    }
+                    Labels.Add(yguess);
+                    if (yguess == example.Label)
+                    {
+                        correct_values++;
+                    }
+                }
+                Console.WriteLine("0: \t" + poss);
+                Console.WriteLine("inf: \t" + inff);
+
+                Accuracy = correct_values / Convert.ToDouble(TrainingData.Count);
+
+
+
+                //Test Data
+                correct_values = 0;
+                foreach (var example in TestData)
+                {
+                    double Pos = Prob_Yes;
+                    double Neg = Prob_No;
+                    for (int i = 1; i < 67693; i++)
+                    {
+                        if (example.Vector.ContainsKey(i)) // That means that feature value is 1
+                        {
+                            Pos = Pos * Counts11[i] ;
+                        }
+                        else //That means the feature value is -1
+                        {
+                            Pos = Pos * Counts10[i] ;
+                        }
+                        if (example.Vector.ContainsKey(i)) // That means that feature value is 1
+                        {
+                            Neg = Neg * Counts01[i] ;
+                        }
+                        else //That means the feature value is -1
+                        {
+                            Neg = Neg * Counts00[i] ;
+                        }
+                    }
+                    int yguess;
+                    if (Pos >= Neg)
+                    {
+                        yguess = 1;
+                    }
+                    else
+                    {
+                        yguess = -1;
+                    }
+                    Test_Labels.Add(yguess);
+                    if (yguess == example.Label)
+                    {
+                        correct_values++;
+                    }
+                }
+                Test_Accuracy = correct_values / Convert.ToDouble(TestData.Count);
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -213,11 +348,11 @@ namespace Assignment_1
         {
             Feature = InformationGains.OrderByDescending(x => x.Value).First().Key;
 
-            if(InformationGains.All(x => x.Value == 0))
+            if (InformationGains.All(x => x.Value == 0))
             {
                 for (int i = 1; i < 67693; i++)
                 {
-                    if(!FeaturesTaken.Contains(i))
+                    if (!FeaturesTaken.Contains(i))
                     {
                         Feature = i;
                     }
@@ -246,7 +381,7 @@ namespace Assignment_1
             }
             Datas.Add(LeftData);
             Datas.Add(RightData);
-            
+
 
             for (int i = 0; i < Datas.Count; i++)
             {
@@ -255,14 +390,20 @@ namespace Assignment_1
                 if (Is_Leaf[i]) { LeafValues.Add(Datas[i].Select(p => p.Label).First()); }
                 else if (Datas[i].Count < 2)
                 {
+
                     Is_Leaf[i] = true;
-                    if (Datas[i].Count == 0) { LeafValues.Add(0); }
+                    if (Datas[i].Count == 0)
+                    {
+                        LeafValues.Add(Random());
+                    }
                     else { LeafValues.Add(Datas[i].Select(p => p.Label).First()); }
                 }
-                else { LeafValues.Add(0); } //A 0 leaf value mean its not a leaf. 1 is positive label, -1 is negative label
+                else {
+                    LeafValues.Add(Random());
+                } //A 0 leaf value mean its not a leaf. 1 is positive label, -1 is negative label
             }
-                        
-            if(ResultInLeaf(ref LeftData))
+
+            if (ResultInLeaf(ref LeftData))
             {
                 Is_Leaf[0] = true;
                 if (Datas[0].Count != 0)
@@ -286,7 +427,7 @@ namespace Assignment_1
                 {
                     LeafValues[1] = Datas[0].GroupBy(m => m.Label).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
                 }
-            }           
+            }
 
             if (FeaturesTaken.Count > 67691)
             {
@@ -296,8 +437,8 @@ namespace Assignment_1
                 Feature = -1;
                 return;
             }
-            
-            if(LeafValues.Distinct().ToList().Count == 1 && LeafValues.Any(x => x != 0)) //Remember we check if the leaf values aren't 0 
+
+            if (LeafValues.Distinct().ToList().Count == 1 && LeafValues.Any(x => x != 0)) //Remember we check if the leaf values aren't 0 
             {
                 IsLeaf = true;
                 Children = null;
@@ -312,7 +453,7 @@ namespace Assignment_1
                     for (int i = 0; i < Datas.Count; i++)
                     {
                         List<Entry> data = Datas[i];
-                        Children.Add(new DecisionTree(Is_Leaf[i], ref data, LeafValues[i], DepthRemaining - 1, ref featuresTakenHelper, random));
+                        Children.Add(new DecisionTree(Is_Leaf[i], ref data, LeafValues[i], DepthRemaining - 1, ref featuresTakenHelper, random, Naive_Bayes));
                     }
                 }
                 else
@@ -322,7 +463,7 @@ namespace Assignment_1
                         if (Is_Leaf[i])
                         {
                             List<Entry> data = Datas[i];
-                            Children.Add(new DecisionTree(Is_Leaf[i], ref data, LeafValues[i], DepthRemaining - 1, ref featuresTakenHelper, random));
+                            Children.Add(new DecisionTree(Is_Leaf[i], ref data, LeafValues[i], DepthRemaining - 1, ref featuresTakenHelper, random, Naive_Bayes));
                         }
                         else
                         {
@@ -341,17 +482,25 @@ namespace Assignment_1
                                     }
                                     LeafValues[i] = sumofDatas.GroupBy(m => m.Label).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
                                 }
-                                else //none of the lists contain data points, so get a random lab
+                                else //none of the lists contain data points, so get a random label
                                 {
-                                    LeafValues[i] = (random.Next() % 2);
+                                    LeafValues[i] = Random();
                                 }
                             }
                             List<Entry> data = Datas[i];
-                            Children.Add(new DecisionTree(true, ref data, LeafValues[i], DepthRemaining - 1, ref featuresTakenHelper, random));
+                            Children.Add(new DecisionTree(true, ref data, LeafValues[i], DepthRemaining - 1, ref featuresTakenHelper, random, Naive_Bayes));
                         }
                     }
                 }
-            }            
+            }
+        }
+        public int Random()
+        {
+            int num = random.Next() % 2;
+            if (num == 0)
+                return -1;
+            else
+                return 1;
         }
 
         public bool ResultInLeaf(ref List<Entry> Data)
@@ -387,7 +536,7 @@ namespace Assignment_1
         }
         public int DetermineDepth(int count)
         {
-            if(IsLeaf)
+            if (IsLeaf)
             {
                 return count++;
             }
@@ -438,7 +587,7 @@ namespace Assignment_1
         }
         public void TraverseTree()
         {
-            if(IsLeaf)
+            if (IsLeaf)
             {
                 Console.WriteLine(Value);
             }
@@ -466,12 +615,12 @@ namespace Assignment_1
         {
             if (IsLeaf)
             {
-                if (item.Label != Value) { return  new List<int> { 1, Value }; }
+                if (item.Label != Value) { return new List<int> { 1, Value }; }
                 else { return new List<int> { 0, Value }; }
             }
             else
             {
-                if(!item.Vector.ContainsKey(Feature))
+                if (!item.Vector.ContainsKey(Feature))
                 {
                     return Children[0].DetermineSubError(item);
                 }

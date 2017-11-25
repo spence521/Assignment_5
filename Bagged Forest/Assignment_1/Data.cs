@@ -27,19 +27,40 @@ namespace Assignment_1
         public DecisionTree Tree5 { get; set; }      
         public List<double> Accuracies { get; set; }
         public double Accuracy { get; set; }
+        public double Test_Accuracy { get; set; }
         public int Depth { get; set; }
         public double Error { get; set; }
         public double StandardDeviation { get; set; }
         public List<BaggedForest> Forest { get; set; }
         public List<Entry> Training_Data_Forest { get; set; }
 
+        public double Smoothing_Term { get; set; }
+        
+        /// <summary>
+        /// Naive Bayes Constructor
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="r2"></param>
+        /// <param name="rand"></param>
+        /// <param name="smoothing_term"></param>
+        public Data(StreamReader r, StreamReader r2, Random rand, double smoothing_term)
+        {
+            Smoothing_Term = smoothing_term;
+            Training_Data = new List<Entry>();
+            Test_Data = new List<Entry>();
+            SetData(r, r2);
+            List<Entry> trainingDataHelper = Training_Data;
+            Tree = new DecisionTree(ref trainingDataHelper, Test_Data,  0, rand, true, Smoothing_Term);
+            Accuracy = Tree.Accuracy;
+            Test_Accuracy = Tree.Test_Accuracy;
+        }
         public Data(StreamReader r, StreamReader r2, int depth, Random rand, int ForestSize)
         {
             Forest = new List<BaggedForest>();
             Training_Data_Forest = new List<Entry>();
             Training_Data = new List<Entry>();
             Test_Data = new List<Entry>();
-            SetData(r, r2);
+            SetData(r);
             //SetTrainingData();
             Training_Data_Forest = Training_Data;
 
@@ -50,8 +71,8 @@ namespace Assignment_1
                 SetData(r, r2);
                 //SetTrainingData();
                 List<Entry> trainingDataHelper = Training_Data_Forest.GetRange(0, 100);
-                Tree = new DecisionTree(ref trainingDataHelper, depth, rand);
-                Tree.CollapseTree();
+                Tree = new DecisionTree(ref trainingDataHelper, null, depth, rand, false, 0);
+                //Tree.CollapseTree();
                 List<Entry> testDataHelper = Test_Data;
                 Error = (Convert.ToDouble(Tree.DetermineError(ref testDataHelper)) / Convert.ToDouble(Test_Data.Count)) * 100;
                 Accuracy = 100 - Error;

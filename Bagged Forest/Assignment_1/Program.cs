@@ -68,37 +68,44 @@ namespace Assignment_1
             string startupPath = System.IO.Directory.GetCurrentDirectory();
             Train = File.OpenText(startupPath + @"\speeches.train.liblinear");
             Test = File.OpenText(startupPath + @"\speeches.test.liblinear");
-            int ForestSize = 1;
-            Data DataTree = new Data(Train, Test, int.MaxValue, r, ForestSize);
+            #region Bagged Forest
+            //int ForestSize = 1000;
+            //Data DataTree = new Data(Train, Test, 3, r, ForestSize);
 
-            List<int> FinalPredictions = new List<int>();
-            for (int i = 0; i < DataTree.Forest[0].Predictions.Count; i++)
-            {
-                List<int> helper = new List<int>();
-                foreach (var tree in DataTree.Forest) //loops through each Tree
-                {
-                    helper.Add(tree.Predictions[i]);
-                }
-                int Most_Occured_Label = helper.GroupBy(x => x).OrderByDescending(y => y.Count()).Select(z => z.Key).First();
-                // int ID = DataTree.Forest[1].Predictions[i].Id;
-                FinalPredictions.Add(Most_Occured_Label); //This is adding in increasing order of the test set
-            }
-            int correct_labeling = 0;
-            for (int i = 0; i < 940 /*Test data size*/; i++)
-            {
-                if (DataTree.Training_Data[i].Label == FinalPredictions[i]) //correct labeling
-                {
-                    correct_labeling++;
-                }
-            }
-            double Accuracy = (correct_labeling / FinalPredictions.Count) * 100;
-            Console.WriteLine("Test Set Accuracy:\t" + Accuracy);
-            Console.WriteLine(DataTree.Depth);
+            //List<int> FinalPredictions = new List<int>();
+            //for (int i = 0; i < DataTree.Forest[0].Predictions.Count; i++)
+            //{
+            //    List<int> helper = new List<int>();
+            //    foreach (var tree in DataTree.Forest) //loops through each Tree
+            //    {
+            //        helper.Add(tree.Predictions[i]);
+            //    }
+            //    int Most_Occured_Label = helper.GroupBy(x => x).OrderByDescending(y => y.Count()).Select(z => z.Key).First();
+            //    // int ID = DataTree.Forest[1].Predictions[i].Id;
+            //    FinalPredictions.Add(Most_Occured_Label); //This is adding in increasing order of the test set
+            //}
+            //int correct_labeling = 0;
+            //for (int i = 0; i < 940 /*Test data size*/; i++)
+            //{
+            //    if (DataTree.Training_Data[i].Label == FinalPredictions[i]) //correct labeling
+            //    {
+            //        correct_labeling++;
+            //    }
+            //}
+            //double Accuracy = (Convert.ToDouble(correct_labeling) / FinalPredictions.Count) * 100;
+            //Console.WriteLine("Test Set Accuracy:\t" + Accuracy);
 
+            #endregion
+
+            #region Naive Bayes
+            Data DataTree = new Data(Train, Test, r, 1);
+            Console.WriteLine("Training Accuracy:\t" + DataTree.Accuracy);
+            Console.WriteLine("Test Accuracy:\t" + DataTree.Test_Accuracy);
+            #endregion
             Console.ReadKey(false);
             #endregion
         }
-        
+
         //static decimal helper(double P, double N)
         //{
         //    return decimal.Parse(((-P * Math.Log(P, 2)) - (N * Math.Log(N, 2))).ToString());
