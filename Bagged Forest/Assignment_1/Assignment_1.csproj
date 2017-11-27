@@ -44,15 +44,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccuracyWB.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="DecisionTree.cs" />
     <Compile Include="Entry.cs" />
-    <Compile Include="InformationGain.cs" />
+    <Compile Include="Perceptron.cs" />
     <Compile Include="Prediction.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BaggedForest.cs" />
-    <Compile Include="TrainingData.cs" />
+    <Compile Include="WeightBias.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -8,12 +8,12 @@ namespace Assignment_1
 {
     public class Entry
     {
-        public int Label { get; set; }
+        public int Sign { get; set; }
         public Dictionary<int, double> Vector { get; set; }
 
-        public Entry(int sign, Dictionary<int, double> vector)
+        public Entry(int label, Dictionary<int, double> vector)
         {
-            Label = sign;
+            Sign = label;
             Vector = vector;
         }
         public override string ToString()
@@ -23,7 +23,7 @@ namespace Assignment_1
             {
                 p = p + item + " ";
             }
-            p = p + "] " + Label;
+            p = p + "] " + Sign;
             return p;
         }
 

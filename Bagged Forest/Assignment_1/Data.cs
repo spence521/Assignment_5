@@ -14,19 +14,13 @@ namespace Assignment_1
        // public StreamReader reader_2 { get; set; }
         public List<Entry> Training_Data { get; private set; }
         public List<Entry> Test_Data { get; private set; }
-        public List<Entry> Cross_Validate_Data { get; private set; }
-        public List<Entry> Cross_1 { get; private set; }
-        public List<Entry> Cross_2 { get; private set; }
-        public List<Entry> Cross_3 { get; private set; }
-        public List<Entry> Cross_4 { get; private set; }
-        public List<Entry> Cross_5 { get; private set; }
         public DecisionTree Tree { get; set; }
         public DecisionTree Tree2 { get; set; }
         public DecisionTree Tree3 { get; set; }
         public DecisionTree Tree4 { get; set; }
         public DecisionTree Tree5 { get; set; }      
         public List<double> Accuracies { get; set; }
-        public double Accuracy { get; set; }
+        public double Train_Accuracy { get; set; }
         public double Test_Accuracy { get; set; }
         public int Depth { get; set; }
         public double Error { get; set; }
@@ -35,7 +29,159 @@ namespace Assignment_1
         public List<Entry> Training_Data_Forest { get; set; }
 
         public double Smoothing_Term { get; set; }
-        
+
+        /// <summary>
+        /// Perceptron Data
+        /// </summary>
+        public Perceptron perceptron { get; set; }
+        public List<Entry> Cross_Validate_Data { get; private set; }
+        public List<Entry> Cross_1 { get; private set; }
+        public List<Entry> Cross_2 { get; private set; }
+        public List<Entry> Cross_3 { get; private set; }
+        public List<Entry> Cross_4 { get; private set; }
+        public List<Entry> Cross_5 { get; private set; }
+        public double Learning_Rate { get; set; }
+        public double Margin { get; set; }
+        public double C { get; set; }
+        public double Tradeoff { get; set; }
+        public Dictionary<int, AccuracyWB> AccuracyWeightB { get; private set; }
+        public WeightBias BestWeightBias { get; set; }
+
+        public Data(int epochs, double learning_rate, double margin, double c, bool logistic_regression, double tradeoff, Random r,
+            List<Entry> train, List<Entry> test)
+        {
+            double temp_accuracy1;
+            double temp_accuracy2;
+            double temp_accuracy3;
+            double temp_accuracy4;
+            double temp_accuracy5;
+            Learning_Rate = learning_rate;
+            C = c;
+            Tradeoff = tradeoff;
+            Training_Data = new List<Entry>();
+            Test_Data = new List<Entry>();
+            Cross_Validate_Data = train.Concat(test).ToList();
+            Cross_1 = new List<Entry>();
+            Cross_2 = new List<Entry>();
+            Cross_3 = new List<Entry>();
+            Cross_4 = new List<Entry>();
+            Cross_5 = new List<Entry>();
+            SetValidateData(r);
+
+            #region First Fold
+            Training_Data = new List<Entry>();
+            Test_Data = new List<Entry>();
+            Training_Data = Cross_1.Concat(Cross_2.Concat(Cross_3.Concat(Cross_4))).ToList();
+            Test_Data = Cross_5;
+
+            perceptron = new Perceptron(Training_Data, Test_Data, learning_rate, margin, C, logistic_regression, Tradeoff, r);
+            Dictionary<int, double> w = new Dictionary<int, double>();
+            double b = (r.NextDouble() * (0.01 + 0.01) - 0.01);
+
+            WeightBias wb = new WeightBias(w, b, 0);
+            for (int i = 0; i < epochs; i++)
+            {
+                wb = perceptron.CalculateWB(wb);
+                perceptron.ShuffleTraining_Data(r);
+            }
+            temp_accuracy1 = perceptron.GetAccuracy(Test_Data, wb);
+            #endregion
+
+            #region Second Fold
+            Training_Data = new List<Entry>();
+            Test_Data = new List<Entry>();
+
+            Training_Data = Cross_1.Concat(Cross_2.Concat(Cross_3.Concat(Cross_5))).ToList();
+            Test_Data = Cross_4;
+
+            perceptron = new Perceptron(Training_Data, Test_Data, learning_rate, margin, C, logistic_regression, Tradeoff, r);
+            wb = new WeightBias(w, b, 0);
+            for (int i = 0; i < epochs; i++)
+            {
+                wb = perceptron.CalculateWB(wb);
+                perceptron.ShuffleTraining_Data(r);
+            }
+            temp_accuracy2 = perceptron.GetAccuracy(Test_Data, wb);
+            #endregion
+
+            #region Third Fold
+            Training_Data = new List<Entry>();
+            Test_Data = new List<Entry>();
+
+            Training_Data = Cross_1.Concat(Cross_2.Concat(Cross_4.Concat(Cross_5))).ToList();
+            Test_Data = Cross_3;
+
+            perceptron = new Perceptron(Training_Data, Test_Data, learning_rate, margin, C, logistic_regression, Tradeoff, r);
+            wb = new WeightBias(w, b, 0);
+            for (int i = 0; i < epochs; i++)
+            {
+                wb = perceptron.CalculateWB(wb);
+                perceptron.ShuffleTraining_Data(r);
+            }
+            temp_accuracy3 = perceptron.GetAccuracy(Test_Data, wb);
+            #endregion
+
+            #region Fourth Fold
+            Training_Data = new List<Entry>();
+            Test_Data = new List<Entry>();
+
+            Training_Data = Cross_1.Concat(Cross_3.Concat(Cross_4.Concat(Cross_5))).ToList();
+            Test_Data = Cross_2;
+
+            perceptron = new Perceptron(Training_Data, Test_Data, learning_rate, margin, C, logistic_regression, Tradeoff, r);
+            wb = new WeightBias(w, b, 0);
+            for (int i = 0; i < epochs; i++)
+            {
+                wb = perceptron.CalculateWB(wb);
+                perceptron.ShuffleTraining_Data(r);
+            }
+            temp_accuracy4 = perceptron.GetAccuracy(Test_Data, wb);
+            #endregion
+
+            #region Fifth Fold
+            Training_Data = new List<Entry>();
+            Test_Data = new List<Entry>();
+
+            Training_Data = Cross_2.Concat(Cross_3.Concat(Cross_4.Concat(Cross_5))).ToList();
+            Test_Data = Cross_1;
+
+            perceptron = new Perceptron(Training_Data, Test_Data, learning_rate, margin, C, logistic_regression, Tradeoff, r);
+            wb = new WeightBias(w, b, 0);
+            for (int i = 0; i < epochs; i++)
+            {
+                wb = perceptron.CalculateWB(wb);
+                perceptron.ShuffleTraining_Data(r);
+            }
+            temp_accuracy5 = perceptron.GetAccuracy(Test_Data, wb);
+            #endregion
+
+            Test_Accuracy = (temp_accuracy1 + temp_accuracy2 + temp_accuracy3 + temp_accuracy4 + temp_accuracy5) / 5;
+        }
+        public Data(List<Entry> r1, List<Entry> r2, Random r, int epochs, double learning_rate, double margin, double c, bool logistic_regression, double tradeoff)
+        {
+            C = c;
+            Tradeoff = tradeoff;
+            Training_Data = r1;
+            Test_Data = r2;
+            AccuracyWeightB = new Dictionary<int, AccuracyWB>();
+            perceptron = new Perceptron(Training_Data, Test_Data, learning_rate, margin, C, logistic_regression, Tradeoff, r);
+
+            Dictionary<int, double> w = new Dictionary<int, double>();
+            double b = (r.NextDouble() * (0.01 + 0.01) - 0.01);
+
+            WeightBias wb = new WeightBias(w, b, 0);
+            for (int i = 0; i < epochs; i++)
+            {
+                wb = perceptron.CalculateWB(wb);
+                AccuracyWeightB.Add(i + 1, new AccuracyWB(perceptron.GetAccuracy(Test_Data, wb), wb));
+                perceptron.ShuffleTraining_Data(r);
+            }
+            AccuracyWB bestAccuracy = AccuracyWeightB.OrderByDescending(x => x.Value.Accuracy).ThenByDescending(y => y.Key).Select(z => z.Value).First();
+            Train_Accuracy = perceptron.GetAccuracy(Training_Data, bestAccuracy.Weight_Bias); //Train Accuracy
+            Test_Accuracy = bestAccuracy.Accuracy; //Test Accuracy
+            BestWeightBias = bestAccuracy.Weight_Bias;
+            Learning_Rate = learning_rate;
+        }
         /// <summary>
         /// Naive Bayes Constructor
         /// </summary>
@@ -51,7 +197,7 @@ namespace Assignment_1
             SetData(r, r2);
             List<Entry> trainingDataHelper = Training_Data;
             Tree = new DecisionTree(ref trainingDataHelper, Test_Data,  0, rand, true, Smoothing_Term);
-            Accuracy = Tree.Accuracy;
+            Train_Accuracy = Tree.Accuracy;
             Test_Accuracy = Tree.Test_Accuracy;
         }
         public Data(StreamReader r, StreamReader r2, int depth, Random rand, int ForestSize)
@@ -66,6 +212,7 @@ namespace Assignment_1
 
             for (int i = 0; i < ForestSize; i++)
             {
+                ShuffleForestData(rand);
                 Training_Data = new List<Entry>();
                 Test_Data = new List<Entry>();
                 SetData(r, r2);
@@ -75,195 +222,22 @@ namespace Assignment_1
                 //Tree.CollapseTree();
                 List<Entry> testDataHelper = Test_Data;
                 Error = (Convert.ToDouble(Tree.DetermineError(ref testDataHelper)) / Convert.ToDouble(Test_Data.Count)) * 100;
-                Accuracy = 100 - Error;
+                Test_Accuracy = 100 - Error;
                 Depth = Tree.DetermineDepth(0);
-                ShuffleForestData(rand);
+                List<int> Test_Predictions = Tree.Labels;
 
                 Training_Data = new List<Entry>();
-                Test_Data = new List<Entry>();
-                SetData(r2); // setting the test data equal to Training_Data Here.
-                //SetTrainingData();
+                SetData(r); 
                 Tree.Labels = new List<int>();
-                trainingDataHelper = Training_Data; //this is really the test data
-                Tree.DetermineError(ref trainingDataHelper);
+                trainingDataHelper = Training_Data; //this is really the train data
+                Train_Accuracy = 100 - ((Tree.DetermineError(ref trainingDataHelper) / Convert.ToDouble(Training_Data.Count)) * 100);
+                List<int> Train_Predictions = Tree.Labels;
 
-                Forest.Add(new BaggedForest(Accuracy, Tree.Labels));
+                Forest.Add(new BaggedForest(Train_Accuracy, Test_Accuracy, Train_Predictions, Test_Predictions));
 
-                if(i % 3 == 0) { Console.WriteLine(i); }
+                if(i % 5 == 0) { Console.WriteLine(i); }
             }
         }
-        #region Data Not Needed
-        //public Data(StreamReader train, StreamReader test, StreamReader eval, StreamReader eval_ID, int depth, Random r)
-        //{
-        //    double temp_error1;
-        //    double temp_error2;
-        //    double temp_error3; 
-        //    double temp_error4;
-        //    double temp_error5;
-        //    Cross_Validate_Data = new List<Entry>();
-        //    Predictions = new List<Prediction>();
-        //    Predictions2 = new List<Prediction>();
-        //    Predictions3 = new List<Prediction>();
-        //    Predictions4 = new List<Prediction>();
-        //    Predictions5 = new List<Prediction>();
-        //    Predictions_Average = new List<Prediction>();
-        //    Cross_1 = new List<Entry>();
-        //    Cross_2 = new List<Entry>();
-        //    Cross_3 = new List<Entry>();
-        //    Cross_4 = new List<Entry>();
-        //    Cross_5 = new List<Entry>();
-        //    Accuracies = new List<double>();
-        //    SetValidateData(train, test, r);
-
-        //    #region First Fold
-        //    data_1 = new List<Entry>();
-        //    Training_Data = new List<TrainingData>();
-        //    data_2 = new List<Entry>();
-        //    Test_Data = new List<TrainingData>();
-            
-        //    data_1 = Cross_1.Concat(Cross_2.Concat(Cross_3.Concat(Cross_4))).ToList();
-        //    data_2 = Cross_5;
-        //    SetTrainingData();
-
-        //    List<TrainingData> trainingDataHelper = Training_Data;
-        //    Tree = new DecisionTree(ref trainingDataHelper, depth, r);
-        //    Tree.CollapseTree();
-
-        //    List<TrainingData> testDataHelper = Test_Data;
-        //    temp_error1 = (Convert.ToDouble(Tree.DetermineError(ref testDataHelper)) / Convert.ToDouble(Test_Data.Count)) * 100;
-        //    Tree.Accuracy = 100 - temp_error1;
-
-        //    data_1 = new List<Entry>();
-        //    data_2 = new List<Entry>();
-        //    Training_Data = new List<TrainingData>();
-        //    SetData(eval);
-        //    SetTrainingData();
-        //    Tree.Labels = new List<int>();
-        //    trainingDataHelper = Training_Data;
-        //    Tree.DetermineError(ref trainingDataHelper);
-        //    Predictions = SetPredictions(eval_ID, Tree.Labels);
-        //    #endregion
-
-        //    #region Second Fold
-        //    Training_Data = new List<TrainingData>();
-        //    Test_Data = new List<TrainingData>();
-
-        //    data_1 = Cross_1.Concat(Cross_2.Concat(Cross_3.Concat(Cross_5))).ToList();
-        //    data_2 = Cross_4;
-        //    SetTrainingData();
-
-        //    trainingDataHelper = Training_Data;
-        //    Tree2 = new DecisionTree(ref trainingDataHelper, depth, r);
-        //    Tree2.CollapseTree();
-        //    testDataHelper = Test_Data;
-        //    temp_error2 = (Convert.ToDouble(Tree2.DetermineError(ref testDataHelper)) / Convert.ToDouble(Test_Data.Count)) * 100;
-        //    Tree2.Accuracy = 100 - temp_error2;
-
-        //    data_1 = new List<Entry>();
-        //    data_2 = new List<Entry>();
-        //    Training_Data = new List<TrainingData>();
-        //    SetData(eval);
-        //    SetTrainingData();
-        //    Tree2.Labels = new List<int>();
-        //    trainingDataHelper = Training_Data;
-        //    Tree2.DetermineError(ref trainingDataHelper);
-        //    Predictions2 = SetPredictions(eval_ID, Tree2.Labels);
-        //    #endregion
-
-        //    #region Third Fold
-        //    Training_Data = new List<TrainingData>();
-        //    Test_Data = new List<TrainingData>();
-
-        //    data_1 = Cross_1.Concat(Cross_2.Concat(Cross_4.Concat(Cross_5))).ToList();
-        //    data_2 = Cross_3;
-        //    SetTrainingData();
-
-        //    trainingDataHelper = Training_Data;
-        //    Tree3 = new DecisionTree(ref trainingDataHelper, depth, r);
-        //    Tree3.CollapseTree();
-        //    testDataHelper = Test_Data;
-        //    temp_error3 = (Convert.ToDouble(Tree3.DetermineError(ref testDataHelper)) / Convert.ToDouble(Test_Data.Count)) * 100;
-        //    Tree3.Accuracy = 100 - temp_error3;
-
-        //    data_1 = new List<Entry>();
-        //    data_2 = new List<Entry>();
-        //    Training_Data = new List<TrainingData>();
-        //    SetData(eval);
-        //    SetTrainingData();
-        //    Tree3.Labels = new List<int>();
-        //    trainingDataHelper = Training_Data;
-        //    Tree3.DetermineError(ref trainingDataHelper);
-        //    Predictions3 = SetPredictions(eval_ID, Tree3.Labels);
-        //    #endregion
-
-        //    #region Fourth Fold
-        //    Training_Data = new List<TrainingData>();
-        //    Test_Data = new List<TrainingData>();
-
-        //    data_1 = Cross_1.Concat(Cross_3.Concat(Cross_4.Concat(Cross_5))).ToList();
-        //    data_2 = Cross_2;
-        //    SetTrainingData();
-
-        //    trainingDataHelper = Training_Data;
-        //    Tree4 = new DecisionTree(ref trainingDataHelper, depth, r);
-        //    Tree4.CollapseTree();
-        //    testDataHelper = Test_Data;
-        //    temp_error4 = (Convert.ToDouble(Tree4.DetermineError(ref testDataHelper)) / Convert.ToDouble(Test_Data.Count)) * 100;
-        //    Tree4.Accuracy = 100 - temp_error4;
-
-        //    data_1 = new List<Entry>();
-        //    data_2 = new List<Entry>();
-        //    Training_Data = new List<TrainingData>();
-        //    SetData(eval);
-        //    SetTrainingData();
-        //    Tree4.Labels = new List<int>();
-        //    trainingDataHelper = Training_Data;
-        //    Tree4.DetermineError(ref trainingDataHelper);
-        //    Predictions4 = SetPredictions(eval_ID, Tree4.Labels);
-        //    #endregion
-
-        //    #region Fifth Fold
-        //    Training_Data = new List<TrainingData>();
-        //    Test_Data = new List<TrainingData>();
-
-        //    data_1 = Cross_2.Concat(Cross_3.Concat(Cross_4.Concat(Cross_5))).ToList();
-        //    data_2 = Cross_1;
-        //    SetTrainingData();
-
-        //    trainingDataHelper = Training_Data;
-        //    Tree5 = new DecisionTree(ref trainingDataHelper, depth, r);
-        //    Tree5.CollapseTree();
-        //    testDataHelper = Test_Data;
-        //    temp_error5 = (Convert.ToDouble(Tree5.DetermineError(ref testDataHelper)) / Convert.ToDouble(Test_Data.Count)) * 100;
-        //    Tree5.Accuracy = 100 - temp_error5;
-
-        //    data_1 = new List<Entry>();
-        //    data_2 = new List<Entry>();
-        //    Training_Data = new List<TrainingData>();
-        //    SetData(eval);
-        //    SetTrainingData();
-        //    Tree5.Labels = new List<int>();
-        //    trainingDataHelper = Training_Data;
-        //    Tree5.DetermineError(ref trainingDataHelper);
-        //    Predictions5 = SetPredictions(eval_ID, Tree5.Labels);
-        //    #endregion
-
-        //    SetAveragedPredictions();
-        //    StandardDeviation = CalculateStandardDeviation(1-temp_error1, 1-temp_error2, 1-temp_error3, 1-temp_error4, 1-temp_error5);
-        //    //Console.WriteLine(temp_error1);
-        //    //Console.WriteLine(temp_error2);
-        //    //Console.WriteLine(temp_error3);
-        //    //Console.WriteLine(temp_error4);
-        //    Error = (temp_error1 + temp_error2 + temp_error3 + temp_error4) / 4;
-        //    Accuracies.Add(Tree.Accuracy);
-        //    Accuracies.Add(Tree2.Accuracy);
-        //    Accuracies.Add(Tree3.Accuracy);
-        //    Accuracies.Add(Tree4.Accuracy);
-        //    Accuracies.Add(Tree5.Accuracy);
-        //    Accuracy = Accuracies.Average();
-        //    Depth = Tree.DetermineDepth(0);
-        //}
-        #endregion
         public void SetData(StreamReader reader, StreamReader reader_2 = null)
         {
             reader.DiscardBufferedData();
@@ -316,7 +290,7 @@ namespace Assignment_1
             int i = 1;
             foreach (var item in Training_Data)
             {
-                Console.WriteLine(i + "\t" + item.Label + " " + item.Vector.ToString());
+                Console.WriteLine(i + "\t" + item.Sign + " " + item.Vector.ToString());
                 i++;
             }
         }
@@ -325,28 +299,10 @@ namespace Assignment_1
             int i = 1;
             foreach (var item in Test_Data)
             {
-                Console.WriteLine(i + "\t" + item.Label + " " + item.Vector.ToString());
+                Console.WriteLine(i + "\t" + item.Sign + " " + item.Vector.ToString());
                 i++;
             }
         }
-
-        //public void SetTrainingData()
-        //{
-        //    foreach (var item in data_1)
-        //    {
-        //        Training_Data.Add(new TrainingData(ScreenNameLength(item.Vector[0]), DescriptionLength(item.Vector[1]), Days(item.Vector[2]), Hours(item.Vector[3]), 
-        //            MinSec(item.Vector[4]), MinSec(item.Vector[5]), Follow(item.Vector[6]), Follow(item.Vector[7]), Ratio(item.Vector[8]), Tweets(item.Vector[9]), 
-        //            TweetsPerDay(item.Vector[10]), AverageLinks(item.Vector[11]), AverageLinks(item.Vector[12]), AverageUsername(item.Vector[13]), 
-        //            AverageUsername(item.Vector[14]), ChangeRate(item.Vector[15]), item.Sign));
-        //    }
-        //    foreach (var item in data_2)
-        //    {
-        //        Test_Data.Add(new TrainingData(ScreenNameLength(item.Vector[0]), DescriptionLength(item.Vector[1]), Days(item.Vector[2]), Hours(item.Vector[3]),
-        //            MinSec(item.Vector[4]), MinSec(item.Vector[5]), Follow(item.Vector[6]), Follow(item.Vector[7]), Ratio(item.Vector[8]), Tweets(item.Vector[9]),
-        //            TweetsPerDay(item.Vector[10]), AverageLinks(item.Vector[11]), AverageLinks(item.Vector[12]), AverageUsername(item.Vector[13]),
-        //            AverageUsername(item.Vector[14]), ChangeRate(item.Vector[15]), item.Sign));
-        //    }
-        //}
         public void PrintTrainingData()
         {
             int i = 1;
@@ -393,6 +349,22 @@ namespace Assignment_1
         private void ShuffleForestData(Random rand)
         {
             Training_Data_Forest = Training_Data_Forest.OrderBy(i => rand.Next()).ToList();
+        }
+
+        public void SetValidateData(Random rSeed)
+        {
+            Cross_Validate_Data = Cross_Validate_Data.OrderBy(i => rSeed.Next()).ToList();
+            Cross_Validate_Data = Cross_Validate_Data.OrderBy(i => rSeed.Next()).ToList();
+            Cross_Validate_Data = Cross_Validate_Data.OrderBy(i => rSeed.Next()).ToList();
+            Cross_Validate_Data = Cross_Validate_Data.OrderBy(i => rSeed.Next()).ToList();
+            Cross_Validate_Data = Cross_Validate_Data.OrderBy(i => rSeed.Next()).ToList();
+            Cross_Validate_Data = Cross_Validate_Data.OrderBy(i => rSeed.Next()).ToList();
+            int seperator = Convert.ToInt32(Math.Floor(Convert.ToDecimal(Cross_Validate_Data.Count) / 5M));
+            Cross_1 = Cross_Validate_Data.GetRange(0, seperator);
+            Cross_2 = Cross_Validate_Data.GetRange(seperator, seperator);
+            Cross_3 = Cross_Validate_Data.GetRange(2 * seperator, seperator);
+            Cross_4 = Cross_Validate_Data.GetRange(3 * seperator, seperator);
+            Cross_5 = Cross_Validate_Data.GetRange(4 * seperator, Cross_Validate_Data.Count - (4 * seperator));
         }
     }
 }

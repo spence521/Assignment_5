@@ -70,7 +70,7 @@ namespace Assignment_1
             Children = new List<DecisionTree>();
             DepthRemaining = depthRemaining;
             Value = value;
-            Console.WriteLine(depthRemaining);
+            
             if (!IsLeaf)
             {
                 FeaturesTaken = featuresTaken;
@@ -95,7 +95,7 @@ namespace Assignment_1
             double N;
             foreach (var item in TrainingData)
             {
-                if (item.Label == 1) { positive_labels++; }
+                if (item.Sign == 1) { positive_labels++; }
                 else { negative_labels++; }
             }
             P = Convert.ToDouble(positive_labels) / TrainingData.Count;
@@ -119,31 +119,19 @@ namespace Assignment_1
             double Negative_Labels = 0;
             foreach (var example in TrainingData)
             {
-                if (example.Label == 1)
+                if (example.Sign == 1)
                 {
                     for (int i = 1; i < 67693; i++)
                     {
                         if (example.Vector.ContainsKey(i)) //This means that the feature is +1 and the true label is +1
                         {
-                            if (Counts11.ContainsKey(i))
-                            {
-                                Counts11[i] = Counts11[i] + 1;
-                            }
-                            else
-                            {
-                                Counts11.Add(i, 1);
-                            }
+                            if (Counts11.ContainsKey(i)) { Counts11[i] = Counts11[i] + 1; }
+                            else { Counts11.Add(i, 1); }
                         }
                         else //This means that the feature is -1 and the true label is +1
                         {
-                            if (Counts10.ContainsKey(i))
-                            {
-                                Counts10[i] = Counts10[i] + 1;
-                            }
-                            else
-                            {
-                                Counts10.Add(i, 1);
-                            }
+                            if (Counts10.ContainsKey(i)) { Counts10[i] = Counts10[i] + 1; }
+                            else { Counts10.Add(i, 1); }
                         }
                     }
                     Positive_Labels++;
@@ -154,25 +142,13 @@ namespace Assignment_1
                     {
                         if (example.Vector.ContainsKey(i)) //This means that the feature is +1 and the true label is -1
                         {
-                            if (Counts01.ContainsKey(i))
-                            {
-                                Counts01[i] = Counts01[i] + 1;
-                            }
-                            else
-                            {
-                                Counts01.Add(i, 1);
-                            }
+                            if (Counts01.ContainsKey(i)) { Counts01[i] = Counts01[i] + 1; }
+                            else { Counts01.Add(i, 1); }
                         }
                         else //This means that the feature is -1 and the true label is -1
                         {
-                            if (Counts00.ContainsKey(i))
-                            {
-                                Counts00[i] = Counts00[i] + 1;
-                            }
-                            else
-                            {
-                                Counts00.Add(i, 1);
-                            }
+                            if (Counts00.ContainsKey(i)) { Counts00[i] = Counts00[i] + 1; }
+                            else { Counts00.Add(i, 1); }
                         }
                     }
                     Negative_Labels++;
@@ -190,6 +166,7 @@ namespace Assignment_1
                     InformationGains.Add(i, CalculateInformationGain(Positive_Labels, Negative_Labels, PosLabel_PosFeature, NegLabel_PosFeature, PosLabel_NegFeature, NegLabel_NegFeature));
                 }
             }
+            #region Naive Bayes
             else // Do Naive Bayes Stuff
             {
                 double Prob_Yes = Positive_Labels / TrainingData.Count;
@@ -251,7 +228,7 @@ namespace Assignment_1
                         yguess = -1;
                     }
                     Labels.Add(yguess);
-                    if (yguess == example.Label)
+                    if (yguess == example.Sign)
                     {
                         correct_values++;
                     }
@@ -298,13 +275,14 @@ namespace Assignment_1
                         yguess = -1;
                     }
                     Test_Labels.Add(yguess);
-                    if (yguess == example.Label)
+                    if (yguess == example.Sign)
                     {
                         correct_values++;
                     }
                 }
                 Test_Accuracy = correct_values / Convert.ToDouble(TestData.Count);
             }
+            #endregion
         }
 
         /// <summary>
@@ -342,7 +320,7 @@ namespace Assignment_1
             {
                 Console.WriteLine("You have a NaN, or infinity value");
             }
-            return Entropy - Feature_Result;
+            return Feature_Result;
         }
         private void DetermineFeature()
         {
@@ -385,9 +363,9 @@ namespace Assignment_1
 
             for (int i = 0; i < Datas.Count; i++)
             {
-                Distinct_Labels.Add((from h in Datas[i] select h.Label).Distinct().ToList());
+                Distinct_Labels.Add((from h in Datas[i] select h.Sign).Distinct().ToList());
                 Is_Leaf.Add(Distinct_Labels[i].Count == 1);
-                if (Is_Leaf[i]) { LeafValues.Add(Datas[i].Select(p => p.Label).First()); }
+                if (Is_Leaf[i]) { LeafValues.Add(Datas[i].Select(p => p.Sign).First()); }
                 else if (Datas[i].Count < 2)
                 {
 
@@ -396,7 +374,7 @@ namespace Assignment_1
                     {
                         LeafValues.Add(Random());
                     }
-                    else { LeafValues.Add(Datas[i].Select(p => p.Label).First()); }
+                    else { LeafValues.Add(Datas[i].Select(p => p.Sign).First()); }
                 }
                 else {
                     LeafValues.Add(Random());
@@ -408,11 +386,11 @@ namespace Assignment_1
                 Is_Leaf[0] = true;
                 if (Datas[0].Count != 0)
                 {
-                    LeafValues[0] = Datas[0].GroupBy(m => m.Label).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
+                    LeafValues[0] = Datas[0].GroupBy(m => m.Sign).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
                 }
                 else
                 {
-                    LeafValues[0] = Datas[1].GroupBy(m => m.Label).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
+                    LeafValues[0] = Datas[1].GroupBy(m => m.Sign).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
                 }
             }
 
@@ -421,11 +399,11 @@ namespace Assignment_1
                 Is_Leaf[1] = true;
                 if (Datas[1].Count != 0)
                 {
-                    LeafValues[1] = Datas[1].GroupBy(m => m.Label).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
+                    LeafValues[1] = Datas[1].GroupBy(m => m.Sign).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
                 }
                 else
                 {
-                    LeafValues[1] = Datas[0].GroupBy(m => m.Label).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
+                    LeafValues[1] = Datas[0].GroupBy(m => m.Sign).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
                 }
             }
 
@@ -433,7 +411,7 @@ namespace Assignment_1
             {
                 IsLeaf = true;
                 Children = null;
-                Value = TrainingData.GroupBy(m => m.Label).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
+                Value = TrainingData.GroupBy(m => m.Sign).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
                 Feature = -1;
                 return;
             }
@@ -469,7 +447,7 @@ namespace Assignment_1
                         {
                             if (Datas[i].Count > 0)
                             {
-                                LeafValues[i] = Datas[i].GroupBy(m => m.Label).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
+                                LeafValues[i] = Datas[i].GroupBy(m => m.Sign).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
                             }
                             else
                             {
@@ -480,7 +458,7 @@ namespace Assignment_1
                                     {
                                         sumofDatas.AddRange(item);
                                     }
-                                    LeafValues[i] = sumofDatas.GroupBy(m => m.Label).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
+                                    LeafValues[i] = sumofDatas.GroupBy(m => m.Sign).OrderByDescending(r => r.Count()).Take(1).Select(p => p.Key).First();
                                 }
                                 else //none of the lists contain data points, so get a random label
                                 {
@@ -615,7 +593,7 @@ namespace Assignment_1
         {
             if (IsLeaf)
             {
-                if (item.Label != Value) { return new List<int> { 1, Value }; }
+                if (item.Sign != Value) { return new List<int> { 1, Value }; }
                 else { return new List<int> { 0, Value }; }
             }
             else
