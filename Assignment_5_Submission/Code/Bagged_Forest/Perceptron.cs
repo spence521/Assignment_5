@@ -41,7 +41,6 @@ namespace Assignment_1
             foreach (var item in Training_Data)
             {
                 int y = item.Sign; // true label
-                int yguess;
                 Dictionary<int, double> x = item.Vector;
                 double xw = 0;
                 foreach (var xi in x)

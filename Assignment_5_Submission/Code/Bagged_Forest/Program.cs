@@ -55,16 +55,15 @@ namespace Assignment_1
             Data data42;
             StreamReader Train;
             StreamReader Test;
-            StreamReader Train_Forest;
-            StreamReader Test_Forest;
+            //StreamReader Train_Forest;
+            //StreamReader Test_Forest;
             StreamReader Cross_1;
             StreamReader Cross_2;
             StreamReader Cross_3;
             StreamReader Cross_4;
             StreamReader Cross_5;
             Random r = new Random(2);
-            int depth = int.MaxValue;
-
+            
             #region Arguments
             if (args.Length == 0)
             {

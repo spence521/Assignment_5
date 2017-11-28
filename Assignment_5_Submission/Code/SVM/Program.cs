@@ -84,7 +84,6 @@ namespace Assignement_2
                 //Cross_5 = File.OpenText(startupPath + @"\training04.data");
 
                 #region Part 1 (SVM)
-                Data dataEval;
                 Data dataTest;
                 #region Datas
                 data1 = new Data(10, 10     /*Learning Rate*/, 0 /*Margin*/, 10 /*C*/, false, 0, r, Train, Test, Cross_1, Cross_2, Cross_3, Cross_4, Cross_5);
