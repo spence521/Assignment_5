@@ -9,6 +9,6 @@ mono Code/SVM/Program.exe Data_Files/speeches.train.liblinear Data_Files/speeche
 
 mono Code/Logistic_Regression/Program.exe Data_Files/speeches.train.liblinear Data_Files/speeches.test.liblinear Data_Files/training00.data Data_Files/training01.data Data_Files/training02.data Data_Files/training03.data Data_Files/training04.data
 
-mono Code/Bagged_Forest/Program.exe Data_Files/speeches.train.liblinear Data_Files/speeches.test.liblinear 
+mono Code/Bagged_Forest/Program.exe Data_Files/speeches.train.liblinear Data_Files/speeches.test.liblinear Data_Files/training00.data Data_Files/training01.data Data_Files/training02.data Data_Files/training03.data Data_Files/training04.data
 #rm Code/Program.exe
 exit 0

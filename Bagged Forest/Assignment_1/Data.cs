@@ -185,6 +185,85 @@ namespace Assignment_1
         /// <summary>
         /// Naive Bayes Constructor
         /// </summary>
+        public Data(double smoothing_term, Random r, StreamReader r1, StreamReader r2, StreamReader r3, StreamReader r4, StreamReader r5)
+        {
+            double temp_accuracy1;
+            double temp_accuracy2;
+            double temp_accuracy3;
+            double temp_accuracy4;
+            double temp_accuracy5;
+            Smoothing_Term = smoothing_term;
+
+            #region First Fold
+            Training_Data = new List<Entry>();
+            Test_Data = new List<Entry>();
+
+            SetData(r1, r5);
+            SetData(r2);
+            SetData(r3);
+            SetData(r4);
+            List<Entry> trainingDataHelper = Training_Data;
+            Tree = new DecisionTree(ref trainingDataHelper, Test_Data, 0, r, true, Smoothing_Term);
+            temp_accuracy1 = Tree.Test_Accuracy;
+            #endregion
+
+            #region Second Fold
+            Training_Data = new List<Entry>();
+            Test_Data = new List<Entry>();
+
+            SetData(r1, r4);
+            SetData(r2);
+            SetData(r3);
+            SetData(r5);
+            trainingDataHelper = Training_Data;
+            Tree = new DecisionTree(ref trainingDataHelper, Test_Data, 0, r, true, Smoothing_Term);
+            temp_accuracy2 = Tree.Test_Accuracy;
+            #endregion
+
+            #region Third Fold
+            Training_Data = new List<Entry>();
+            Test_Data = new List<Entry>();
+
+            SetData(r1, r3);
+            SetData(r2);
+            SetData(r4);
+            SetData(r5);
+            trainingDataHelper = Training_Data;
+            Tree = new DecisionTree(ref trainingDataHelper, Test_Data, 0, r, true, Smoothing_Term);
+            temp_accuracy3 = Tree.Test_Accuracy;
+            #endregion
+
+            #region Fourth Fold
+            Training_Data = new List<Entry>();
+            Test_Data = new List<Entry>();
+
+            SetData(r1, r2);
+            SetData(r3);
+            SetData(r4);
+            SetData(r5);
+            trainingDataHelper = Training_Data;
+            Tree = new DecisionTree(ref trainingDataHelper, Test_Data, 0, r, true, Smoothing_Term);
+            temp_accuracy4 = Tree.Test_Accuracy;
+            #endregion
+
+            #region Fifth Fold
+            Training_Data = new List<Entry>();
+            Test_Data = new List<Entry>();
+
+            SetData(r2, r1);
+            SetData(r3);
+            SetData(r4);
+            SetData(r5);
+            trainingDataHelper = Training_Data;
+            Tree = new DecisionTree(ref trainingDataHelper, Test_Data, 0, r, true, Smoothing_Term);
+            temp_accuracy5 = Tree.Test_Accuracy;
+            #endregion
+
+            Test_Accuracy = (temp_accuracy1 + temp_accuracy2 + temp_accuracy3 + temp_accuracy4 + temp_accuracy5) / 5;
+        }
+        /// <summary>
+        /// Naive Bayes Constructor
+        /// </summary>
         /// <param name="r"></param>
         /// <param name="r2"></param>
         /// <param name="rand"></param>
@@ -235,8 +314,14 @@ namespace Assignment_1
 
                 Forest.Add(new BaggedForest(Train_Accuracy, Test_Accuracy, Train_Predictions, Test_Predictions));
 
-                if(i % 5 == 0) { Console.WriteLine(i); }
+                //if(i % 5 == 0) { Console.WriteLine(i); }
             }
+        }
+        public Data(StreamReader r, StreamReader r2)
+        {
+            Training_Data = new List<Entry>();
+            Test_Data = new List<Entry>();
+            SetData(r, r2);
         }
         public void SetData(StreamReader reader, StreamReader reader_2 = null)
         {

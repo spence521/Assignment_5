@@ -193,8 +193,8 @@ namespace Assignment_1
                 int inff = 0;
                 foreach (var example in TrainingData)
                 {
-                    double Pos = Prob_Yes * double.MaxValue * 2;
-                    double Neg = Prob_No * double.MaxValue * 2;
+                    double Pos = Prob_Yes * double.MaxValue * 1.5;
+                    double Neg = Prob_No * double.MaxValue * 1.5;
                     for (int i = 1; i < 67693; i++)
                     {
                         if (example.Vector.ContainsKey(i)) // That means that feature value is 1
@@ -233,8 +233,8 @@ namespace Assignment_1
                         correct_values++;
                     }
                 }
-                Console.WriteLine("0: \t" + poss);
-                Console.WriteLine("inf: \t" + inff);
+                //Console.WriteLine("0: \t" + poss);
+                //Console.WriteLine("inf: \t" + inff);
 
                 Accuracy = correct_values / Convert.ToDouble(TrainingData.Count);
 
@@ -294,9 +294,6 @@ namespace Assignment_1
         /// <returns></returns>
         private double CalculateInformationGain(double Yes, double No, double Yes_P, double Yes_N, double No_P, double No_N)
         {
-            //if (Yes == 0) { Yes = 1; }
-            //if (No == 0) { No = 1; }
-
             double Yes_Positive = Yes_P / (Yes == 0 ? 1 : Yes);
             double Yes_Negative = Yes_N / (Yes == 0 ? 1 : Yes);
             double No_Positive = No_P / (No == 0 ? 1 : No);
@@ -359,7 +356,6 @@ namespace Assignment_1
             }
             Datas.Add(LeftData);
             Datas.Add(RightData);
-
 
             for (int i = 0; i < Datas.Count; i++)
             {

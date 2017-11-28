@@ -54,38 +54,20 @@ namespace Assignement_2
                 xw += b;
                 if (Logistic_Regression) //Logistic Regression
                 {
-                    if (y * xw <= 1)
+                    foreach (var xi in x)  //foreach (KeyValuePair<int, double> wi in w) //update this 16 here.
                     {
-                        foreach (var xi in x)  //foreach (KeyValuePair<int, double> wi in w) //update this 16 here.
+                        if (w.ContainsKey(xi.Key)) //if contains key
                         {
-                            if (w.ContainsKey(xi.Key)) //if contains key
-                            {
-                                w[xi.Key] = ((1 - (2 * Learning_Rate / Tradeoff)) * w[xi.Key] ) + ((Learning_Rate * y * xi.Value) / (Math.Exp(y * xw) + 1));
-                            }
-                            else //if doesn't contain key, it would x[wi.Key] would result to 0, so:
-                            {
-                                w[xi.Key] = ((1 - (2 * Learning_Rate / Tradeoff)) * RandomNumber()) + ((Learning_Rate * y * xi.Value) / (Math.Exp(y * xw) + 1));
-                            }
+                            w[xi.Key] = ((1 - (2 * Learning_Rate / Tradeoff)) * w[xi.Key]) + ((Learning_Rate * y * xi.Value) / (Math.Exp(y * xw) + 1));
                         }
-                        b = ((1 - (2 * Learning_Rate / Tradeoff)) * b) + ((Learning_Rate * y) / (Math.Exp(y * b) + 1));
+                        else //if doesn't contain key, it would x[wi.Key] would result to 0, so:
+                        {
+                            w[xi.Key] = ((1 - (2 * Learning_Rate / Tradeoff)) * RandomNumber()) + ((Learning_Rate * y * xi.Value) / (Math.Exp(y * xw) + 1));
+                        }
+                    }
+                    b = ((1 - (2 * Learning_Rate / Tradeoff)) * b) + ((Learning_Rate * y) / (Math.Exp(y * b) + 1));
 
-                        errors++;
-                    }
-                    else
-                    {
-                        foreach (var xi in x) 
-                        {
-                            if (w.ContainsKey(xi.Key))
-                            {
-                                w[xi.Key] = ((1 - (2 * Learning_Rate / Tradeoff)) * w[xi.Key]);
-                            }
-                            else
-                            {
-                                w[xi.Key] = ((1 - (2 * Learning_Rate / Tradeoff)) * RandomNumber());
-                            }
-                        }
-                        b = ((1 - (2 * Learning_Rate / Tradeoff)) * b);
-                    }
+                    errors++;
                 }
                 else //Support Vector Machine (SVM)
                 {

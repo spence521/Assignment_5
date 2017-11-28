@@ -140,6 +140,7 @@ namespace Assignement_2
                 Console.WriteLine("The total number of updates/mistakes for the best Weight and Bias: \n\t" + dataTest.BestWeightBias.Updates);
                 Console.WriteLine("Training Set Accuracy: \n\t" + Math.Round(dataTest.Training_Accuracy, 3));
                 Console.WriteLine("Test Set Accuracy: \n\t" + Math.Round(dataTest.Accuracy, 3));
+                Console.WriteLine("Average cross-validation Accuracy: \n\t" + Math.Round(LargestData.Accuracy, 3));
                 Console.WriteLine("---------------------------------------------------------------------------------------");
                 #endregion
             }
