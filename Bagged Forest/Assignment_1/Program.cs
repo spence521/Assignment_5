@@ -79,7 +79,7 @@ namespace Assignment_1
                 Cross_3 = File.OpenText(args[4]);
                 Cross_4 = File.OpenText(args[5]);
                 Cross_5 = File.OpenText(args[6]);                
-                string startupPath = System.IO.Directory.GetCurrentDirectory();
+                //string startupPath = System.IO.Directory.GetCurrentDirectory();
                 //Train = File.OpenText(startupPath + @"\speeches.train.liblinear");
                 //Test = File.OpenText(startupPath + @"\speeches.test.liblinear");
                 //Cross_1 = File.OpenText(startupPath + @"\training00.data");
