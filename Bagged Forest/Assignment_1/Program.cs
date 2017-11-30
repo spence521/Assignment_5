@@ -181,29 +181,29 @@ namespace Assignment_1
                 #endregion
 
                 #region Generating Data for SVM and LR
-                string to_file = "";
-                foreach (var item in SVM_LR_Train_Data)
-                {
-                    to_file += item.Sign + " ";
-                    foreach (var item2 in item.Vector)
-                    {
-                        to_file += item2.Key + ":" + item2.Value + " ";
-                    }
-                    to_file += Environment.NewLine;
-                }
-                File.WriteAllText(startupPath + @"\tree.train.data", to_file);
+                //string to_file = "";
+                //foreach (var item in SVM_LR_Train_Data)
+                //{
+                //    to_file += item.Sign + " ";
+                //    foreach (var item2 in item.Vector)
+                //    {
+                //        to_file += item2.Key + ":" + item2.Value + " ";
+                //    }
+                //    to_file += Environment.NewLine;
+                //}
+                //File.WriteAllText(startupPath + @"\tree.train.data", to_file);
 
-                to_file = "";
-                foreach (var item in SVM_LR_Test_Data)
-                {
-                    to_file += item.Sign + " ";
-                    foreach (var item2 in item.Vector)
-                    {
-                        to_file += item2.Key + ":" + item2.Value + " ";
-                    }
-                    to_file += Environment.NewLine;
-                }
-                File.WriteAllText(startupPath + @"\tree.test.data", to_file);
+                //to_file = "";
+                //foreach (var item in SVM_LR_Test_Data)
+                //{
+                //    to_file += item.Sign + " ";
+                //    foreach (var item2 in item.Vector)
+                //    {
+                //        to_file += item2.Key + ":" + item2.Value + " ";
+                //    }
+                //    to_file += Environment.NewLine;
+                //}
+                //File.WriteAllText(startupPath + @"\tree.test.data", to_file);
                 #endregion
 
                 #region SVM over Trees

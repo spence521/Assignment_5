@@ -193,25 +193,25 @@ namespace Assignment_1
                 int inff = 0;
                 foreach (var example in TrainingData)
                 {
-                    double Pos = Prob_Yes * double.MaxValue * 1.5;
-                    double Neg = Prob_No * double.MaxValue * 1.5;
+                    double Pos = Math.Log10(Prob_Yes);// * double.MaxValue * 1.5;
+                    double Neg = Math.Log10(Prob_No);// * double.MaxValue * 1.5;
                     for (int i = 1; i < 67693; i++)
                     {
                         if (example.Vector.ContainsKey(i)) // That means that feature value is 1
                         {
-                            Pos = Pos * Counts11[i];// * 1.022;
+                            Pos = Pos + Math.Log10(Counts11[i]);// * 1.022;
                         }
                         else //That means the feature value is -1
                         {
-                            Pos = Pos * Counts10[i];// * 1.022;
+                            Pos = Pos + Math.Log10(Counts10[i]);// * 1.022;
                         }
                         if (example.Vector.ContainsKey(i)) // That means that feature value is 1
                         {
-                            Neg = Neg * Counts01[i];// * 1.022;
+                            Neg = Neg + Math.Log10(Counts01[i]);// * 1.022;
                         }
                         else //That means the feature value is -1
                         {
-                            Neg = Neg * Counts00[i];// * 1.022;
+                            Neg = Neg + Math.Log10(Counts00[i]);// * 1.022;
                         }
                     }
                     int yguess;
@@ -238,31 +238,29 @@ namespace Assignment_1
 
                 Accuracy = correct_values / Convert.ToDouble(TrainingData.Count);
 
-
-
                 //Test Data
                 correct_values = 0;
                 foreach (var example in TestData)
                 {
-                    double Pos = Prob_Yes;
-                    double Neg = Prob_No;
+                    double Pos = Math.Log10(Prob_Yes);
+                    double Neg = Math.Log10(Prob_No);
                     for (int i = 1; i < 67693; i++)
                     {
                         if (example.Vector.ContainsKey(i)) // That means that feature value is 1
                         {
-                            Pos = Pos * Counts11[i] ;
+                            Pos = Pos + Math.Log10(Counts11[i]);
                         }
                         else //That means the feature value is -1
                         {
-                            Pos = Pos * Counts10[i] ;
+                            Pos = Pos + Math.Log10(Counts10[i]);
                         }
                         if (example.Vector.ContainsKey(i)) // That means that feature value is 1
                         {
-                            Neg = Neg * Counts01[i] ;
+                            Neg = Neg + Math.Log10(Counts01[i]);
                         }
                         else //That means the feature value is -1
                         {
-                            Neg = Neg * Counts00[i] ;
+                            Neg = Neg + Math.Log10(Counts00[i]);
                         }
                     }
                     int yguess;
